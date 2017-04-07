@@ -23,6 +23,8 @@
   <link  href='support/theme.css' rel='stylesheet'>
   <script src='support/theme.js'></script>
 
+  <!-- Playground -->
+  <script async src="https://replay-154206.appspot.com/static/ei.js"></script>
 
   <script id="markdown" type="text/markdown" src="index.html">
 
@@ -144,14 +146,21 @@ to the last item in the sequence. In this example, the binding `three`
 evaluates to the `integer` `3`.  The `{}` block ensures that `one` and `two`
 are not accessible after `three` is computed.
 
-```reason
+<pre>
+<p data-id="-P8x86Mg6w" data-host="replay-154206.appspot.com" data-height="256" data-font-size="12px" class="replay-embed" >
+<!--- Snippet Generated Through Replay
 let three = {
   let one = 1;
   let two = 2;
   one + two
 };
 /* one and two not accessible here! */
-```
+
+print_int three;
+-->
+</p>
+</pre>
+
 > Note that the last item may optionally include a terminating semicolon.
 
 #### Constant bindings
