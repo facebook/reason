@@ -1,0 +1,23 @@
+include
+  (struct
+     type t = int
+     type t2 = int list
+     type mylist = int list
+     type mylist2 = int list
+     type mylist3 = int list
+     type ('a,'b) ttt = ('a list* 'b)
+     let m : (int* int) = (2, 3)
+     
+     and n : int = 5
+     
+   end :
+    sig
+      type t
+      type t2
+      type mylist = int list
+      type mylist2 = t list
+      type mylist3 = t2
+      type ('a,'b) ttt = ('a list* 'b)
+      val m : (t* t)
+      val n : t
+    end)

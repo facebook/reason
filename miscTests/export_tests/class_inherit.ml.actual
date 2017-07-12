@@ -1,0 +1,94 @@
+include
+  (struct
+     let on_click start stop f = () 
+     let on_mousedown start stop f = () 
+     type mev = {
+       mouse_x: int ;
+       mouse_y: int }
+     class virtual shape (x : int)  (y : int) =
+       object (self)
+         method virtual private  contains : int -> int -> bool
+         val mutable x = (x : int)
+         method x : int= x
+         val mutable y = (y : int)
+         method y : int= y
+         method on_click (start : int) (stop : int) (f : int -> int -> unit)
+           =
+           (on_click start stop
+              (fun ev  ->
+                 if self#contains ev.mouse_x ev.mouse_y
+                 then f ev.mouse_x ev.mouse_y) : unit)
+         method on_mousedown (start : int) (stop : int)
+           (f : int -> int -> unit) =
+           (on_mousedown start stop
+              (fun ev  ->
+                 if self#contains ev.mouse_x ev.mouse_y
+                 then f ev.mouse_x ev.mouse_y) : unit)
+       end
+     class square (w : int)  (x : int)  (y : int) =
+       object
+         inherit  (shape x y)
+         val mutable width = (w : int)
+         method width : int= width
+         method draw : unit= ()
+         method private contains (x' : int) (y' : int) =
+           ((x <= x') &&
+              ((x' <= (x + width)) && ((y <= y') && (y' <= (y + width)))) : 
+           bool)
+       end
+     class circle (r : int)  (x : int)  (y : int) =
+       object
+         inherit  (shape x y)
+         val mutable radius = (r : int)
+         method radius : int= radius
+         method draw : unit= ()
+         method private contains (x' : int) (y' : int) =
+           (let dx = abs (x' - x)  in
+            let dy = abs (y' - y)  in
+            let dist = sqrt (float_of_int ((dx * dx) + (dy * dy)))  in
+            dist <= (float_of_int radius) : bool)
+       end
+     class growing_circle r  x  y =
+       object (self)
+         inherit  (circle r x y)
+         initializer
+           self#on_click 0 0 (fun _x  -> fun _y  -> radius <- radius * 2)
+       end
+   end :
+    sig
+      class virtual shape :
+        int ->
+          int ->
+            object
+              method private  virtual contains : int -> int -> bool
+              val  mutable x : int
+              method  x : int
+              val  mutable y : int
+              method  y : int
+              method  on_click : int -> int -> (int -> int -> unit) -> unit
+              method  on_mousedown :
+                int -> int -> (int -> int -> unit) -> unit
+            end
+      class square :
+        int ->
+          int ->
+            int ->
+              object
+                inherit shape
+                val  mutable width : int
+                method  width : int
+                method  draw : unit
+                method private  contains : int -> int -> bool
+              end
+      class circle :
+        int ->
+          int ->
+            int ->
+              object
+                inherit shape
+                val  mutable radius : int
+                method  radius : int
+                method  draw : unit
+                method private  contains : int -> int -> bool
+              end
+    end)

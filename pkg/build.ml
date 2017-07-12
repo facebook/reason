@@ -45,6 +45,7 @@ let () =
     Pkg.bin "src/reactjs_jsx_ppx" ~dst:"reactjs_jsx_ppx";
     Pkg.bin "src/reactjs_jsx_ppx_2" ~dst:"reactjs_jsx_ppx_2";
     Pkg.bin "src/ppx_react" ~dst:"ppx_react";
+    Pkg.bin "src/ppx_export" ~dst:"ppx_export";
 
     doc "README.md";
     doc "LICENSE.txt";

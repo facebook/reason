@@ -1,0 +1,13 @@
+include
+  (struct
+     let a (b : int) (c : char) = ("boe" : string) 
+     let a (() : unit) = (34 : int) 
+     let a () = (34 : int) 
+     let rec a (b : int) = (if b > 2 then a (b - 1) else 10 : int) 
+   end :
+    sig
+      val a : int -> char -> string
+      val a : unit -> int
+      val a : unit -> int
+      val a : int -> int
+    end)

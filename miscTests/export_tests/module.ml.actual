@@ -1,0 +1,101 @@
+include
+  (struct
+     module Bar =
+       struct
+         let int_implicit = 1 
+         let string_implicit = "str" 
+         let char_implicit = 'c' 
+         let float_implicit = 1.1 
+         let int_explicit : int = 1 
+         let string_explicit : string = "str" 
+         let char_explicit : char = 'c' 
+         let float_explicit : float = 1.1 
+         type foo =
+           | Pleh 
+           | Bleh 
+         let x : foo = Bleh 
+         type record = {
+           a: string }
+         let impl : record = { a = "2" } 
+         type extensible = ..
+         type extensible +=
+           | SayWhat 
+         exception SomeException of string 
+         let a (b : int) (c : char) = ("boe" : string) 
+         module Deep =
+           struct
+             module Dive =
+               struct
+                 let int_implicit = 1 
+                 let string_implicit = "str" 
+                 let char_implicit = 'c' 
+                 let float_implicit = 1.1 
+                 let int_explicit : int = 1 
+                 let string_explicit : string = "str" 
+                 let char_explicit : char = 'c' 
+                 let float_explicit : float = 1.1 
+                 type foo =
+                   | Pleh 
+                   | Bleh 
+                 let x : foo = Bleh 
+                 type record = {
+                   a: string }
+                 let impl : record = { a = "2" } 
+                 type extensible = ..
+                 type extensible +=
+                   | SayWhat 
+                 exception SomeException of string 
+               end
+           end
+       end
+   end :
+    sig
+      module Bar :
+      sig
+        val int_implicit : int
+        val string_implicit : string
+        val char_implicit : char
+        val float_implicit : float
+        val int_explicit : int
+        val string_explicit : string
+        val char_explicit : char
+        val float_explicit : float
+        type foo =
+          | Pleh 
+          | Bleh 
+        val x : foo
+        type record = {
+          a: string }
+        val impl : record
+        type extensible = ..
+        type extensible +=
+          | SayWhat 
+        exception SomeException of string 
+        val a : int -> char -> string
+        module Deep :
+        sig
+          module Dive :
+          sig
+            val int_implicit : int
+            val string_implicit : string
+            val char_implicit : char
+            val float_implicit : float
+            val int_explicit : int
+            val string_explicit : string
+            val char_explicit : char
+            val float_explicit : float
+            type foo =
+              | Pleh 
+              | Bleh 
+            val x : foo
+            type record = {
+              a: string }
+            val impl : record
+            type extensible = ..
+            type extensible +=
+              | SayWhat 
+            exception SomeException of string 
+          end
+        end
+      end
+    end)

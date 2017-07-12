@@ -1,0 +1,17 @@
+include
+  (struct
+     module type X_int  = sig val x : int end
+     module Increment(M:X_int)(N:X_int) : X_int = struct let x = M.x + 1  end 
+     module Three = struct let x : int = 3  end
+     module Six : X_int = struct let x : int = 3  end 
+     module Four : X_int = Increment(Three)(Six) 
+     module Five : X_int = Four 
+   end :
+    sig
+      module type X_int  = sig val x : int end[@@export ]
+      module Increment : functor (M : X_int) -> functor (N : X_int) -> X_int
+      module Three : sig val x : int end
+      module Six : X_int
+      module Four : X_int
+      module Five : X_int
+    end)

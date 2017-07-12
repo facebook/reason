@@ -1,0 +1,20 @@
+include
+  (struct
+     module rec Even:sig type t =
+                           | Zero 
+                           | Succ of Odd.t  end =
+       struct type t =
+                | Zero 
+                | Succ of Odd.t  end
+      and Odd:sig type t =
+                    | Succ of Even.t  end =
+       struct type t =
+                | Succ of Even.t  end
+   end :
+    sig
+      module rec Even: sig type t =
+                             | Zero 
+                             | Succ of Odd.t  end
+      and Odd: sig type t =
+                     | Succ of Even.t  end
+    end)
