@@ -19,8 +19,8 @@ archive(native) = "reason.cmxa"
 
 package "parser" (
   requires = "ppx_tools_versioned"
-  archive(byte) = "ppx_deriving.cmo ppx_deriving_show.cmo easy_format.cmo reasonparser.cma"
-  archive(native) = "ppx_deriving.cmx ppx_deriving_show.cmx easy_format.cmx reasonparser.cmxa"
+  archive(byte) = "ppx_deriving.cmo ppx_deriving_show.cmo easy_format_vendored.cmo reasonparser.cma"
+  archive(native) = "ppx_deriving.cmx ppx_deriving_show.cmx easy_format_vendored.cmx reasonparser.cmxa"
 )
 
 package "lib" (

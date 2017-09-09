@@ -56,10 +56,11 @@ open Location
 open Lexing
 open Longident
 open Parsetree
-open Easy_format
+open Easy_format_vendored
 open Syntax_util
 open Ast_mapper
 
+module Easy_format = Easy_format_vendored
 
 type commentCategory =
   | EndOfLine

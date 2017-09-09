@@ -22,7 +22,6 @@ build: [
 depends: [
   "ocamlfind"               {build}
   "menhir"                  {= "20170418"}
-  "utop"                    {>= "1.17"}
   "merlin-extend"           {>= "0.3"}
   "result"                  {=  "1.2"}
   "topkg"                   {>=  "0.8.1" & < "0.9"}

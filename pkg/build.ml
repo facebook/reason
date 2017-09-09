@@ -42,7 +42,7 @@ let () =
     (* But then regardless of if we have `utop` installed - still compile a
        library when the use case demands that there be no `utop` *)
     Pkg.lib ~exts:(Exts.exts [".cmo"; ".cmx";".cmi"; ".cmt"]) "vendor/cmdliner/cmdliner";
-    Pkg.lib ~exts:(Exts.exts [".cmo"; ".cmx";".cmi"; ".cmt"; ".o"]) "vendor/easy_format/easy_format";
+    Pkg.lib ~exts:(Exts.exts [".cmo"; ".cmx";".cmi"; ".cmt"; ".o"]) "vendor/easy_format/easy_format_vendored";
     Pkg.lib ~exts:(Exts.exts [".cmo"; ".cmx";".cmi"; ".cmt"; ".o"]) "vendor/ppx_deriving/ppx_deriving";
     Pkg.lib ~exts:(Exts.exts [".cmo"; ".cmx";".cmi"; ".cmt"; ".o"]) "vendor/ppx_deriving/ppx_deriving_show";
     Pkg.lib ~exts:(Exts.exts [".cmo"]) "src/reason_toploop";
