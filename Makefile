@@ -5,7 +5,7 @@ SHELL=bash -o pipefail
 default: build
 
 build:
-	jbuilder build
+	jbuilder build --dev
 
 install:
 	opam pin add reason . -y

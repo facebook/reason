@@ -199,8 +199,8 @@ let print_out_value ppf tree =
     | Oval_float f -> pp_print_string ppf (float_repres f)
     | Oval_char c -> fprintf ppf "%C" c
     | Oval_string s ->
-        begin try fprintf ppf "%S" s with
-          Invalid_argument "String.create" -> fprintf ppf "<huge string>"
+        begin try [@ocaml.warning "-52"] fprintf ppf "%S" s with
+          Invalid_argument  "String.create" -> fprintf ppf "<huge string>"
         end
     | Oval_list tl ->
         fprintf ppf "@[<1>[%a]@]" (print_tree_list print_tree_1 ",") tl
@@ -483,7 +483,7 @@ and print_typlist print_elem sep ppf =
       print_typlist print_elem sep ppf tyl
 and print_out_wrap_type ppf =
   function
-  | (Otyp_constr (id, _::_)) as ty ->
+  | (Otyp_constr (_, _::_)) as ty ->
       print_out_type ppf ty
   | ty -> print_simple_out_type ppf ty
 and print_typargs ppf =
@@ -541,7 +541,7 @@ let rec print_out_class_type ppf =
           fprintf ppf "@[%a,@ %a@]"
             print_out_type typ1
             print_class_type_arguments_that_might_be_arrow typ2
-        | Otyp_arrow (actual_label, typ1, typ2) ->
+        | Otyp_arrow (_actual_label, typ1, typ2) ->
           fprintf ppf "@[~%s: %a,@ %a@]"
             lab
             print_out_type typ1
@@ -647,7 +647,7 @@ and print_out_sig_item ppf =
   | Osig_typext (ext, Oext_exception) ->
       fprintf ppf "@[<2>exception %a@]"
         print_out_constr (ext.oext_name, ext.oext_args, ext.oext_ret_type)
-  | Osig_typext (ext, es) ->
+  | Osig_typext (ext, _) ->
       print_out_extension_constructor ppf ext
   | Osig_modtype (name, Omty_abstract) ->
       fprintf ppf "@[<2>module type %s@]" name

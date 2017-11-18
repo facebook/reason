@@ -1,6 +1,4 @@
 open MenhirSdk
-open Cmly_api
-open Printf
 
 module G = Cmly_read.Read(struct let filename = Sys.argv.(1) end)
 open G
@@ -14,7 +12,7 @@ let states_transitioning_on pred =
   let keep_state lr1 =
     (* There are two kind of transitions (leading to SHIFT or REDUCE), detect
        those who accept identifiers *)
-    List.exists (fun (term, prod) -> pred (T term)) (Lr1.reductions lr1) ||
+    List.exists (fun (term, _) -> pred (T term)) (Lr1.reductions lr1) ||
     List.exists (fun (sym, _) -> pred sym) (Lr1.transitions lr1)
   in
   (* Now we filter the list of all states and keep the interesting ones *)
