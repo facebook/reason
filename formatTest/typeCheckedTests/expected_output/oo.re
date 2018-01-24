@@ -116,24 +116,12 @@ let (>>) = (a, b) => a > b;
 
 let bigger = 3 >> 2;
 
-type typeDefForClosedObj = {
-  .
-  x: int,
-  y: int
-};
+type typeDefForClosedObj = {. x: int, y: int};
 
 type typeDefForOpenObj('a) =
-  {
-    ..
-    x: int,
-    y: int
-  } as 'a;
+  {.. x: int, y: int} as 'a;
 
-let anonClosedObject: {
-  .
-  x: int,
-  y: int
-} = {
+let anonClosedObject: {. x: int, y: int} = {
   pub x = 0;
   pub y = 0
 };
@@ -147,11 +135,7 @@ let xs: list({. x: int}) = [
 
 let constrainedAndCoerced = (
   [anonClosedObject, anonClosedObject]:
-    list({
-      .
-      x: int,
-      y: int
-    }) :>
+    list({. x: int, y: int}) :>
     list({. x: int})
 );
 
@@ -170,23 +154,11 @@ let coercedReturn = {
 };
 
 let acceptsOpenAnonObjAsArg =
-    (
-      o: {
-        ..
-        x: int,
-        y: int
-      }
-    ) =>
+    (o: {.. x: int, y: int}) =>
   o#x + o#y;
 
 let acceptsClosedAnonObjAsArg =
-    (
-      o: {
-        .
-        x: int,
-        y: int
-      }
-    ) =>
+    (o: {. x: int, y: int}) =>
   o#x + o#y;
 
 let res =

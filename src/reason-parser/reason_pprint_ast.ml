@@ -3003,15 +3003,19 @@ class printer  ()= object(self:'self)
         | Mutable -> makeList ~postSpace:true [atom "mutable"; name]
       in
       let recordRow = if hasPunning then
-          label withMutable (atom "")
+          withMutable
         else
           label ~space:true withMutable (self#core_type pld.pld_type)
       in
       SourceMap (pld.pld_loc, recordRow)
     in
     let rows = List.map recordRow lbls in
-    (* if a record has more than 2 rows, always break *)
-    let break = if List.length rows >= 2 then Always_rec else IfNeed in
+    let break = begin match assumeRecordLoc with
+    | None -> IfNeed
+    | Some loc ->
+        if Reason_heuristics.staysOnOneLine loc then IfNeed
+        else Always_rec
+    end in
     let rowList = makeList ~wrap:("{", "}") ~sep:"," ~postSpace:true ~break rows in
     match assumeRecordLoc with
     | None -> rowList
@@ -3180,7 +3184,7 @@ class printer  ()= object(self:'self)
         (*         | one::[] -> one *)
         (*         | moreThanOne -> mktyp(Ptyp_tuple(List.rev moreThanOne)) } *)
         | Ptyp_tuple l -> makeTup (List.map self#core_type l)
-        | Ptyp_object (l, o) -> self#unparseObject l o
+        | Ptyp_object (l, o) -> self#unparseObject ~loc:x.ptyp_loc l o
         | Ptyp_package (lid, cstrs) ->
           let typeConstraint (s, ct) =
             label ~space:true
@@ -3220,13 +3224,13 @@ class printer  ()= object(self:'self)
           SourceMap (li.loc, ensureSingleTokenSticksToLabel (self#longident_loc li))
         | Ptyp_constr (li, l) ->
             (match l with
-            | [{ptyp_desc = Ptyp_object (l, o) }] when isJsDotTLongIdent li.txt && List.length l > 0 ->
+            | [{ptyp_desc = Ptyp_object (l, o); ptyp_loc }] when isJsDotTLongIdent li.txt && List.length l > 0 ->
                 (* should have one or more rows, Js.t({..}) should print as Js.t({..})
                  * {..} has a totally different meaning than Js.t({..}) *)
-                self#unparseObject ~withStringKeys:true l o
-            | [{ptyp_desc = Ptyp_object (l, o) }] when not (isJsDotTLongIdent li.txt) ->
+                self#unparseObject ~withStringKeys:true ~loc:ptyp_loc l o
+            | [{ptyp_desc = Ptyp_object (l, o); ptyp_loc }] when not (isJsDotTLongIdent li.txt) ->
                 label (SourceMap (li.loc, self#longident_loc li))
-                  (self#unparseObject ~wrap:("(",")") l o)
+                  (self#unparseObject ~wrap:("(",")") ~loc:ptyp_loc l o)
             | _ ->
               (* small guidance: in `type foo = bar`, we're now at the `bar` part *)
 
@@ -5203,6 +5207,7 @@ class printer  ()= object(self:'self)
     ?withStringKeys:(withStringKeys=false)
     ?allowPunning:(allowPunning=true)
     ?forceBreak:(forceBreak=false)
+    ~loc
     l eo =
     (* forceBreak is a ref which can be set to always break the record rows.
      * Example, when we have a row which contains a nested record,
@@ -5247,7 +5252,7 @@ class printer  ()= object(self:'self)
         | (Pexp_record (recordRows, optionalGadt), _, _) ->
             forceBreak := true;
             let keyWithColon = makeList (maybeQuoteFirstElem li [atom ":"]) in
-            let value = self#unparseRecord ~forceBreak: true recordRows optionalGadt in
+            let value = self#unparseRecord ~forceBreak:true ~loc:e.pexp_loc recordRows optionalGadt in
             let row = label ~space:true keyWithColon value in
             if appendComma then makeList [row; comma] else row
         | (Pexp_extension (s, p), _, _) when s.txt = "bs.obj" ->
@@ -5307,7 +5312,12 @@ class printer  ()= object(self:'self)
         ) in
         SourceMap (withRecord.pexp_loc, firstRow)::(getRows l)
     in
-    let break = if !forceBreak then Always else IfNeed in
+    let break = begin match (Reason_heuristics.staysOnOneLine loc, !forceBreak) with
+    | (true, true) -> Always
+    | (true, false) -> IfNeed
+    | (false, true) -> Always
+    | (false, false) -> Always
+    end in
     let (left, right) = wrap in
       makeList ~wrap:(left ^ "{" ,"}" ^ right) ~break ~preSpace:true allRows
 
@@ -5321,7 +5331,7 @@ class printer  ()= object(self:'self)
         | ([], Pexp_letexception _) -> false
         | _ -> true
 
-  method unparseObject ?wrap:(wrap=("", "")) ?(withStringKeys=false) l o =
+  method unparseObject ?wrap:(wrap=("", "")) ?(withStringKeys=false) ~loc l o =
     let core_field_type (s, attrs, ct) =
       let l = extractStdAttrs attrs in
       let row =
@@ -5347,8 +5357,10 @@ class printer  ()= object(self:'self)
       | Closed -> atom "."
       | Open -> atom ".."
     in
-    (* if an object has more than 2 rows, always break for readability *)
-    let break = if List.length rows >= 2 then Always_rec else IfNeed in
+    let break =
+      if Reason_heuristics.staysOnOneLine loc || List.length rows == 0 then IfNeed
+      else Always_rec
+    in
     let (left, right) = wrap in
     makeList ~break:IfNeed ~preSpace:(List.length rows > 0) ~wrap:(left ^ "{", "}" ^ right)
       (openness::[makeList ~break ~inline:(true, true) ~postSpace:true ~sep:"," rows])
@@ -5381,8 +5393,8 @@ class printer  ()= object(self:'self)
     match payload with
     | PStr [itm] -> (
       match itm with
-      | {pstr_desc = Pstr_eval ({ pexp_desc = Pexp_record (l, eo) }, []) } ->
-        self#unparseRecord ~forceBreak ~wrap ~withStringKeys:true ~allowPunning:false l eo
+      | {pstr_desc = Pstr_eval ({ pexp_loc ;pexp_desc = Pexp_record (l, eo) }, []) } ->
+        self#unparseRecord ~forceBreak ~wrap ~withStringKeys:true ~allowPunning:false ~loc:pexp_loc l eo
       | {pstr_desc = Pstr_eval ({ pexp_desc = Pexp_extension ({txt = "bs.obj"}, payload) }, []) } ->
         (* some folks write `[%bs.obj [%bs.obj {foo: bar}]]`. This looks improbable but
           it happens often if you use the sugared version: `[%bs.obj {"foo": bar}]`.
@@ -5487,7 +5499,7 @@ class printer  ()= object(self:'self)
             )
         | Pexp_variant (l, None) ->
             Some (ensureSingleTokenSticksToLabel (atom ("`" ^ l)))
-        | Pexp_record (l, eo) -> Some (self#unparseRecord l eo)
+        | Pexp_record (l, eo) -> Some (self#unparseRecord ~loc:x.pexp_loc l eo)
         | Pexp_array (l) ->
           Some (self#unparseSequence ~construct:`Array l)
         | Pexp_let _ | Pexp_sequence _
@@ -6716,8 +6728,8 @@ class printer  ()= object(self:'self)
    *  Also see "isSingleArgParenApplication" which determines if
    *  this kind of formatting should happen. *)
   method singleArgParenApplication = function
-    | [{pexp_attributes = []; pexp_desc = Pexp_record (l, eo)}] ->
-      self#unparseRecord ~wrap:("(", ")") l eo
+    | [{pexp_attributes = []; pexp_desc = Pexp_record (l, eo); pexp_loc}] ->
+      self#unparseRecord ~wrap:("(", ")") ~loc:pexp_loc l eo
     | [{pexp_attributes = []; pexp_desc = Pexp_tuple l}] ->
       self#unparseSequence ~wrap:("(", ")") ~construct:`Tuple l
     | [{pexp_attributes = []; pexp_desc = Pexp_array l}] ->

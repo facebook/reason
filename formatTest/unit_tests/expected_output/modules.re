@@ -491,7 +491,9 @@ include
       type thing = blahblahblah;
       type state = unit;
       let getInitialState = (_) => ();
-      let myValue = {recordField: "hello"};
+      let myValue = {
+        recordField: "hello"
+      };
     }
   );
 

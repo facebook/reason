@@ -243,10 +243,7 @@ type twoCurriedConstructorsPolyMorphic('a) =
   | TwoCombos(combination('a), combination('a));
 
 /* Matching records */
-type pointRecord = {
-  x: int,
-  y: int
-};
+type pointRecord = {x: int, y: int};
 
 type alsoHasARecord =
   | Blah

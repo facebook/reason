@@ -62,3 +62,7 @@ let funAppCallbackExceedsWidth ~printWidth ~args ~funExpr () =
     end
   in
   aux (printWidth - funLen) args
+
+(* Determines if the start & end position of Location are on the same line *)
+let staysOnOneLine ({loc_start; loc_end} : Location.t) =
+  loc_start.pos_lnum == loc_end.pos_lnum

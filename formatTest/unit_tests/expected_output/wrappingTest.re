@@ -2141,7 +2141,9 @@ let myFunc = (~firstArg, ~another, ~fl) => {
   nameBlah: 10
 };
 
-type inputEchoRecord('a) = {inputIs: 'a};
+type inputEchoRecord('a) = {
+  inputIs: 'a
+};
 
 let df_locallyAbstractFunc =
     (type a, type b, input: a) => {
@@ -2168,7 +2170,9 @@ let df_locallyAbstractFuncNotSugared =
  */
 let df_locallyAbstractFuncAnnotated:
   type a. (a, a) => inputEchoRecord(a) =
-  (input: a, input: a) => {inputIs: input};
+  (input: a, input: a) => {
+    inputIs: input
+  };
 
 /**
  * The following is automatically expanded at the parser level into:
@@ -2288,10 +2292,7 @@ type doubleEqualsRecord =
 
 type doubleEqualsDoublePrivateRecord =
   myRecordWithReallyLongName =
-    pri {
-      xx: int,
-      yy: int
-    };
+    pri {xx: int, yy: int};
 
 type someConstructor =
   | SomeConstructorHi(int, int);
