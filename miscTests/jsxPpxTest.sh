@@ -28,7 +28,7 @@ do
     # for each test, we're gonna use ocamlc and the ppx to dump the post-ppx ocaml
     # file somewhere
 
-    ocamlc -dsource -ppx "./_build/install/default/bin/reactjs_jsx_ppx_${version}" \
+    ocamlc -dsource -ppx "./_build/default/.ppx/jbuild/reason.reactjs_jsx_ppx_${version}/ppx.exe --as-ppx" \
       -pp "./_build/install/default/bin/refmt --print binary" -impl $test \
       2> $tempFile
 

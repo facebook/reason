@@ -1,8 +1,30 @@
 (jbuild_version 1)
 
-(executables
- ((names (ppx_react reactjs_jsx_ppx_v2 reactjs_jsx_ppx_v3))
-  (public_names (ppx_react reactjs_jsx_ppx_v2 reactjs_jsx_ppx_v3))
+(library
+ ((name ppx_react)
+  (public_name reason.ppx_react)
+  (kind ppx_rewriter)
+  (modules ppx_react)
+  (libraries (reason ocaml-migrate-parsetree))))
+
+(library
+ ((name reactjs_jsx_ppx_v2)
+  (public_name reason.reactjs_jsx_ppx_v2)
+  (kind ppx_rewriter)
+  (modules reactjs_jsx_ppx_v2)
+  (libraries (reason ocaml-migrate-parsetree))))
+
+(library
+ ((name reactjs_jsx_ppx_v3)
+  (public_name reason.reactjs_jsx_ppx_v3)
+  (kind ppx_rewriter)
+  (modules reactjs_jsx_ppx_v3)
+  (libraries (reason ocaml-migrate-parsetree))))
+
+;; compatibility for those that use -ppx manually
+(executable
+ ((name ppx_react_compat)
+  (public_name ppx_react)
+  (modules ppx_react_compat)
   (package reason)
-  (libraries
-   (reason ocaml-migrate-parsetree ))))
+  (libraries (reason ocaml-migrate-parsetree ppx_react))))

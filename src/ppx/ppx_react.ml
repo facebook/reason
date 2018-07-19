@@ -12,7 +12,6 @@ let lid txt =
 let str txt = { txt; loc = Location.none }
 
 let expandReactMacro =
-  Reason_toolchain.To_current.copy_mapper
   {
     default_mapper with
     structure = (fun mapper structure  ->
@@ -92,5 +91,6 @@ let expandReactMacro =
      | _ -> structure)
   }
 
-let _ = Compiler_libs.Ast_mapper.register "editor.rehydrate"
-    (fun _argv -> expandReactMacro)
+let () =
+  Driver.register ~name:"editor.rehydrate"
+    Versions.ocaml_404 (fun _config _cookies -> expandReactMacro)

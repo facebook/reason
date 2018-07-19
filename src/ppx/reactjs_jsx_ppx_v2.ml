@@ -38,7 +38,6 @@
 (* #if defined BS_NO_COMPILER_PATCH then *)
 open Migrate_parsetree
 open Ast_404
-module To_current = Convert(OCaml_404)(OCaml_current)
 
 let nolabel = Ast_404.Asttypes.Nolabel
 let labelled str = Ast_404.Asttypes.Labelled str
@@ -305,7 +304,7 @@ let jsxMapper () =
        | e -> default_mapper.expr mapper e) in
 
 (* #if defined BS_NO_COMPILER_PATCH then *)
-  To_current.copy_mapper { default_mapper with structure; expr }
+  { default_mapper with structure; expr }
 (* #else *)
   (* { default_mapper with structure; expr } *)
 (* #end *)
@@ -379,7 +378,9 @@ let jsxMapper () =
                   (* |])) *)
 (* let () = make_ppx "jsxv2" *)
 (* #elif defined BS_NO_COMPILER_PATCH then *)
-let () = Compiler_libs.Ast_mapper.register "JSX" (fun _argv -> jsxMapper ())
+let () =
+  Driver.register ~name:"JSX"
+    Versions.ocaml_404 (fun _config _cookies -> jsxMapper ())
 (* #else *)
 (* let () = Ast_mapper.register "JSX" (fun _argv -> jsxMapper ()) *)
 (* #end *)
