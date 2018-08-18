@@ -486,6 +486,8 @@ rule token = parse
   | "#=" { SHARPEQUAL }
   | "#" operator_chars+
       { SHARPOP(lexeme_operator lexbuf) }
+  | "?" operator_chars+
+    { OPTIONALACCESS(lexeme_operator lexbuf) }
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?
         [^ '\010' '\013'] * newline

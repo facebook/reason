@@ -1240,6 +1240,7 @@ let package_type_of_module_type pmty =
 %token SEMISEMI
 %token SHARP
 %token <string> SHARPOP
+%token <string> OPTIONALACCESS
 %token SHARPEQUAL
 %token SIG
 %token STAR
@@ -1387,6 +1388,8 @@ conflicts.
 (* PREFIXOP and BANG precedence *)
 %nonassoc below_DOT_AND_SHARP           (* practically same as below_SHARP but we convey purpose *)
 %nonassoc SHARP                         (* simple_expr/toplevel_directive *)
+
+%right    OPTIONALACCESS
 %nonassoc below_DOT
 
 (* We need SHARPEQUAL to have lower precedence than `[` to make e.g.
@@ -1406,6 +1409,7 @@ conflicts.
 (* Entry points *)
 
 %start implementation                   (* for implementation files *)
+
 %type <Ast_404.Parsetree.structure> implementation
 %start interface                        (* for interface files *)
 %type <Ast_404.Parsetree.signature> interface
@@ -3146,6 +3150,84 @@ parenthesized_expr:
     { mkexp (Pexp_send($1, $3)) }
   | E as_loc(SHARPOP) simple_expr_no_call
     { mkinfixop $1 (mkoperator $2) $3 }
+    (*
+     * let res = a?.b;
+     *
+     * --generates-->
+     *
+     * let res = switch a {
+     *  | Some(a) => Some(a.b)
+     *  | None => None
+     * };
+     *
+     * let res = c?.+d;
+     *
+     * -generates->
+     *
+     * let res = switch c {
+     *   | Some(c) => c.d <-- assuming d is optional
+     *   | None => None
+     * };
+     *
+     * Same goes for ?# and ?#+ for JS objects
+     *)
+  | E OPTIONALACCESS simple_expr_no_call 
+    {
+      let loc_exp = mklocation $startpos($1) $endpos($1) in
+      let record_name = match $1.pexp_desc with Pexp_ident({txt = Lident(str); loc;}) -> str | _ -> "x" in
+      let prop_name = match $3.pexp_desc with 
+        | Pexp_ident({txt = Lident(str); loc;}) -> str 
+        | Pexp_match({pexp_desc = Pexp_ident({txt = Lident(str); loc;})}, _) -> str
+        | _ -> syntax_error ()
+        in
+      let access_property = match $2 with
+        | "?." | "?.+" -> 
+          mkexp (Pexp_field (
+            mkexp (Pexp_ident({
+              txt = Lident(record_name);
+              loc = loc_exp;
+            })), {
+              txt = Lident(prop_name); 
+              loc = loc_exp;
+            }))
+        | "?#" | "?#+" -> 
+          mkexp (Pexp_apply(
+            mkexp (Pexp_ident({
+              txt = Lident("##");
+              loc = loc_exp;
+            })), [
+              Nolabel, mkexp (Pexp_ident({ txt = Lident(record_name); loc = loc_exp}));
+              Nolabel, mkexp (Pexp_ident({ txt = Lident(prop_name); loc = loc_exp }));
+            ]
+          )) 
+        | _ -> syntax_error ()
+          in
+      let access_property_exp = match $2 with 
+        | "?." | "?#" -> mkexp (Pexp_construct ({txt = Lident("Some"); loc = loc_exp}, Some(access_property)))
+        | "?.+" | "?#+" -> access_property
+        | _ -> syntax_error ()
+      in
+      let some_exp = match $3.pexp_desc with
+        | Pexp_ident(_) -> access_property_exp
+        | Pexp_match(_, _) -> mkexp (Pexp_let(Nonrecursive, [{  
+            pvb_pat = mkpat (Ppat_var(mkloc prop_name loc_exp));
+            pvb_expr = access_property_exp;
+            pvb_attributes = [];
+            pvb_loc = loc_exp; 
+          }], $3));
+        | _ -> syntax_error () in
+      let some_pat =
+        Pat.mk ~loc:loc_exp (Ppat_construct({ txt = Lident("Some"); loc = loc_exp}, Some(mkpat (Ppat_var(mkloc record_name loc_exp))))) in
+      let none_pat = 
+        Pat.mk ~loc:loc_exp (Ppat_construct({ txt = Lident("None"); loc = loc_exp;}, None)) in
+      let some_case = 
+        Exp.case some_pat some_exp
+       in
+      let none_case =
+       Exp.case none_pat (mkexp (Pexp_construct({ txt = Lident("None"); loc = loc_exp;}, None)));
+        in
+      mkexp (Pexp_match ($1, [some_case; none_case]))
+  }
   | E as_loc(SHARPEQUAL) simple_expr
     { let op = { $2 with txt = "#=" } in
       mkinfixop $1 (mkoperator op) $3 }
@@ -3766,6 +3848,7 @@ mark_position_pat
 
   | LPAREN COLONCOLON RPAREN LPAREN pattern_without_or COMMA pattern_without_or RPAREN
     { let loc_coloncolon = mklocation $startpos($2) $endpos($2) in
+
       let loc = mklocation $symbolstartpos $endpos in
       mkpat_cons loc_coloncolon (mkpat ~ghost:true ~loc (Ppat_tuple[$5;$7])) loc
     }

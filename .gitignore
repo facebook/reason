@@ -27,3 +27,5 @@ _esybuild
 _esyinstall
 .merlin
 _release
+**/*.swp
+**/*.swo
