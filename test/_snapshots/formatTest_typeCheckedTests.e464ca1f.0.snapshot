@@ -1,0 +1,64 @@
+formatTest › typeCheckedTests › ./formatTest/typeCheckedTests/input/arityConversion.ml
+Some((1, 2, 3));
+
+type bcd =
+  | TupleConstructor((int, int))
+  | MultiArgumentsConstructor(int, int);
+
+let a =
+  [@implicit_arity] TupleConstructor(1, 2);
+let b =
+  [@implicit_arity]
+  MultiArgumentsConstructor(1, 2);
+
+module Test = {
+  type a =
+    | And((int, int))
+    | Or((int, int));
+};
+
+let _ = [@implicit_arity] Test.And(1, 2);
+let _ = [@implicit_arity] Test.Or(1, 2);
+let _ = Some(1);
+
+[@implicit_arity] Test.And(1, 2);
+[@implicit_arity] Test.Or(1, 2);
+Some(1);
+
+module M = {
+  type t =
+    | TupleConstructorInModule((int, int));
+  type t2 =
+    | TupleConstructor2((int, int));
+  type t3 =
+    | TupleConstructor3((int, int));
+};
+
+type t2 =
+  | TupleConstructor2((int, int));
+type t3 =
+  | TupleConstructor3((int, int));
+
+let _ =
+  [@implicit_arity]
+  M.TupleConstructorInModule(1, 2);
+
+let _ =
+  [@implicit_arity] M.TupleConstructor2(1, 2);
+let _ =
+  [@implicit_arity] TupleConstructor2(1, 2);
+
+let _ =
+  [@implicit_arity] M.TupleConstructor3(1, 2);
+let _ =
+  [@implicit_arity] TupleConstructor3(1, 2);
+
+[@implicit_arity]
+M.TupleConstructorInModule(1, 2);
+
+[@implicit_arity] M.TupleConstructor2(1, 2);
+[@implicit_arity] TupleConstructor2(1, 2);
+
+[@implicit_arity] M.TupleConstructor3(1, 2);
+[@implicit_arity] TupleConstructor3(1, 2);
+

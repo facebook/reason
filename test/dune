@@ -1,0 +1,5 @@
+(library 
+ (name Test) 
+ (public_name reason.test)
+ (libraries reason rely.lib)
+ (flags -linkall -g))

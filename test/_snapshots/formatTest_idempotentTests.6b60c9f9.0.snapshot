@@ -1,0 +1,25 @@
+formatTest › idempotentTests › ./formatTest/idempotentTests/input/assert.crlf.re
+switch (true) {\r
+| true => ()\r
+| false => assert(false)\r
+| _ => assert(false)\r
+};\r
+\r
+let root = {\r
+  let root = Doc.rootNode(doc);\r
+  assert(root.type_ == \"expression\");\r
+  assert(Node.namedChildCount(root) == 1);\r
+  assert(Node.childCount(root) == 1);\r
+  assert(\r
+    Point.toString(root.startPoint)\r
+    == \"(Point.t {:row 0 :column 0})\",\r
+  );\r
+  assert(\r
+    Point.toString(root.endPoint)\r
+    == \"(Point.t {:row 0 :column 9})\",\r
+  );\r
+  root;\r
+};\r
+\r
+assert(theTruth());\r
+

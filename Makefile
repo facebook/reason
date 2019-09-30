@@ -14,10 +14,8 @@ install:
 test-ci: install test
 
 test: build clean-tests
-	dune build src/reason-parser-tests/testOprint.exe
 	# ./miscTests/rtopIntegrationTest.sh
 	./miscTests/jsxPpxTest.sh
-	cd formatTest; ./test.sh
 
 .PHONY: coverage
 coverage:

@@ -1,0 +1,34 @@
+opam-version: "2.0"
+synopsis: "A Unicode library"
+description: """
+Camomile is a Unicode library for OCaml. Camomile provides Unicode character
+type, UTF-8, UTF-16, UTF-32 strings, conversion to/from about 200 encodings,
+collation and locale-sensitive case mappings, and more. The library is currently
+designed for Unicode Standard 3.2."""
+maintainer: ["yoriyuki.y@gmail.com"]
+authors: ["Yoriyuki Yamagata"]
+license: "LGPL-2.1-or-later with OCaml-LGPL-linking-exception"
+homepage: "https://github.com/yoriyuki/Camomile"
+doc: "https://yoriyuki.github.io/Camomile/"
+bug-reports: "https://github.com/yoriyuki/Camomile/issues"
+depends: [
+  "dune" {>= "1.11"}
+  "ocaml" {>= "4.02.3"}
+]
+dev-repo: "git+https://github.com/yoriyuki/Camomile.git"
+build: [
+  ["ocaml" "configure.ml" "--share" "%{share}%/camomile"]
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs
+    "@install"
+    "@doc" {with-doc}
+  ]
+]
+url {
+  src:
+    "https://github.com/yoriyuki/Camomile/releases/download/1.0.2/camomile-1.0.2.tbz"
+  checksum: [
+    "sha256=f0a419b0affc36500f83b086ffaa36c545560cee5d57e84b729e8f851b3d1632"
+    "sha512=7586422e68779476206027c6ebbe19b677fbe459153221f7c952c7fae374c5c8232249cb76fdb1f482069707aa1580be827cd39693906142988268b7f0e7f6d0"
+  ]
+}

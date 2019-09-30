@@ -1,0 +1,4 @@
+formatTest › errorTests › ./formatTest/errorTests/input/lowercase_module.re
+File \"./formatTest/errorTests/input/lowercase_module.re\", line 1, characters 7-16:
+Error: Module names must start with an uppercase letter.
+

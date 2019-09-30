@@ -6,4 +6,6 @@
 
 (executable
  (name testOprint)
+ (public_name testOprint.exe)
+ (package reason-dev)
  (libraries reason))

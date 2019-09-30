@@ -4,7 +4,7 @@ authors: ["Jérémie Dimino"]
 homepage: "https://github.com/diml/lambda-term"
 bug-reports: "https://github.com/diml/lambda-term/issues"
 dev-repo: "git://github.com/diml/lambda-term.git"
-license: "BSD3"
+license: "BSD-3-Clause"
 build: [
   ["jbuilder" "subst" "-p" name] {pinned}
   ["jbuilder" "build" "-p" name "-j" jobs]

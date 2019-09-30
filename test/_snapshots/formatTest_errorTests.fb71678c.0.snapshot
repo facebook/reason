@@ -1,0 +1,4 @@
+formatTest › errorTests › ./formatTest/errorTests/input/comments1.re
+File \"./formatTest/errorTests/input/comments1.re\", line 1, characters 0-2:
+Error: Comment not terminated
+

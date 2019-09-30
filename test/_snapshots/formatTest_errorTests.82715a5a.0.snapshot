@@ -1,0 +1,4 @@
+formatTest › errorTests › ./formatTest/errorTests/input/syntaxError.re
+File \"./formatTest/errorTests/input/syntaxError.re\", line 1, characters 9-10:
+Error: Syntax error
+

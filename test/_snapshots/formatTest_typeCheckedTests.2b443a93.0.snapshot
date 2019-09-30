@@ -1,0 +1,41 @@
+formatTest › typeCheckedTests › ./formatTest/typeCheckedTests/input/comments.mli
+/* **** comment */
+/*** comment */
+/*** docstring */
+/* comment */
+/*** docstring */
+/*** comment */
+/**** comment */
+/***** comment */
+
+/** */;
+/*** */
+/**** */
+
+/***/
+/****/
+
+/** (** comment *) */;
+/** (*** comment *) */;
+
+/* (** comment *) */
+/* (*** comment *) */
+/* *(*** comment *) */
+
+/* comment **/
+/* comment ***/
+/* comment ****/
+/* comment *****/
+
+/**
+  * Multiline
+  */;
+
+/** Multiline
+  *
+  */;
+
+/**
+  **
+  */;
+

@@ -9,7 +9,7 @@ steps:
   - script: esy build
     displayName: 'esy build'
   - template: utils/publish-build-cache.yml
+  - script: esy test
+    displayName: 'esy test'
   - script: esy x refmt --version
     displayName: 'esy x refmt --version'
-  # Run tests or any additional steps here
-  # - script: esy b dune runtest

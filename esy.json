@@ -4,14 +4,15 @@
   "license": "MIT",
   "version": "3.5.0",
   "dependencies": {
-    "ocaml": " >= 4.2.0 < 4.9.0",
-    "@opam/ocamlfind": "*",
+    "@opam/dune": "*",
     "@opam/menhir": " >= 20170418.0.0",
-    "@opam/utop": " >= 1.17.0 < 2.3.0",
     "@opam/merlin-extend": " >= 0.4",
-    "@opam/result": "*",
     "@opam/ocaml-migrate-parsetree": "*",
-    "@opam/dune": "*"
+    "@opam/ocamlfind": "*",
+    "@opam/result": "*",
+    "@opam/utop": " >= 1.17.0 < 2.3.0",
+    "@reason-native/rely": "^3.1.0",
+    "ocaml": " >= 4.2.0 < 4.9.0"
   },
   "devDependencies": {
     "@opam/merlin": "*",
@@ -26,10 +27,30 @@
     "5. Copy ./scripts/esy-prepublish.js in to your repo and change packages= to your set of packages."
   ],
   "esy": {
-    "build": [["dune", "build", "-p", "reason,rtop"]],
+    "build": [
+      [
+        "dune",
+        "build",
+        "-p",
+        "reason,rtop,reason-dev"
+      ]
+    ],
     "install": [
-      ["esy-installer", "reason.install"],
-      ["esy-installer", "rtop.install"]
+      [
+        "esy-installer",
+        "reason.install"
+      ],
+      [
+        "esy-installer",
+        "rtop.install"
+      ],
+      [
+        "esy-installer",
+        "reason-dev.install"
+      ]
     ]
+  },
+  "scripts": {
+    "test": "esy x RunReasonTests.exe"
   }
 }

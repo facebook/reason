@@ -7,7 +7,7 @@ doc: "https://ocaml-community.github.io/cppo/"
 bug-reports: "https://github.com/ocaml-community/cppo/issues"
 depends: [
   "ocaml" {>= "4.03"}
-  "dune" {build & >= "1.0"}
+  "dune" {>= "1.0"}
   "base-unix"
 ]
 build: [

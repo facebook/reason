@@ -1,0 +1,3 @@
+formatTest › unit_tests › ./formatTest/unit_tests/input/singleLineCommentEof.re
+// let x = 1
+

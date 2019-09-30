@@ -13,6 +13,7 @@ formatTest/**/actual_output/
 formatTest/**/intf_output/
 miscTests/reactjs_jsx_ppx_tests/actual*.re
 miscTests/reactjs_jsx_ppx_tests/*.cm*
+TestTest.cmi
 *.log
 src/reason_parser.messages.bak
 src/reason_parser_message.ml
