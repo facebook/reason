@@ -35422,7 +35422,7 @@ implementation: STRING LPAREN WITH
 ## LPAREN 
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+You probably used the wrong type of quotes. For String use " instead of '
 
 implementation: SWITCH PERCENT AND WHILE 
 ##
