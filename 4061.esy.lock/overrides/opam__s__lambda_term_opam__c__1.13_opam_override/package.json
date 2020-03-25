@@ -1,0 +1,17 @@
+{
+  "build": [
+    [
+      "bash",
+      "-c",
+      "#{os == 'windows' ? 'patch -p1 < lambda-term-1.13.patch' : 'true'}"
+    ],
+    [
+      "jbuilder",
+      "build",
+      "-p",
+      "lambda-term",
+      "-j",
+      "4"
+    ]
+  ]
+}

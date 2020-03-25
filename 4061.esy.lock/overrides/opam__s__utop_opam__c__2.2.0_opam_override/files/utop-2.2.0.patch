@@ -1,0 +1,32 @@
+--- ./src/lib/uTop_main.ml
++++ ./src/lib/uTop_main.ml
+@@ -1308,6 +1308,9 @@
+   (* We lost the terminal. *)
+   catch Sys.sighup;
+   (* Termination request. *)
++  if Sys.win32 && !emacs_mode then
++    Sys.set_signal Sys.sigterm Sys.Signal_ignore
++  else
+   catch Sys.sigterm
+ 
+ let load_inputrc () =
+--- ./src/top/expunge/expunge.ml
++++ ./src/top/expunge/expunge.ml
+@@ -3,7 +3,9 @@
+ 
+ let run_and_read_lines args =
+   let cmd = String.concat ~sep:" " (List.map args ~f:Filename.quote) in
++  let cmd = if Sys.win32 then "\"" ^ cmd ^ "\"" else cmd in
+   let ic = Unix.open_process_in cmd in
++  set_binary_mode_in ic false;
+   let rec loop acc =
+     match input_line ic with
+     | exception End_of_file -> List.rev acc
+@@ -60,6 +62,7 @@
+       (Filename.quote dst)
+       (String.concat ~sep:" " (S.elements modules_to_keep))
+   in
++  let cmdline = if Sys.win32 then "\"" ^ cmdline ^ "\"" else cmdline in
+   if verbose then prerr_endline cmdline;
+   exit (Sys.command cmdline)
+ 

@@ -1,0 +1,88 @@
+--- ./src/lTerm_windows_stubs.c
++++ ./src/lTerm_windows_stubs.c
+@@ -16,7 +16,6 @@
+ 
+ #if defined(_WIN32) || defined(_WIN64)
+ 
+-#include <windows.h>
+ #include <lwt_unix.h>
+ 
+ /* +-----------------------------------------------------------------+
+@@ -140,15 +139,7 @@
+   }
+ }
+ 
+-CAMLprim value lt_windows_read_console_input_job(value val_fd)
+-{
+-  LWT_UNIX_INIT_JOB(job, read_console_input, 0);
+-  job->handle = Handle_val(val_fd);
+-  job->error_code = 0;
+-  CAMLreturn(lwt_unix_alloc_job(&(job->job)));
+-}
+-
+-static value result_read_console_input_result(struct job_read_console_input *job)
++static value result_read_console_input(struct job_read_console_input *job)
+ {
+   INPUT_RECORD input;
+   DWORD cks, bs;
+@@ -163,23 +154,23 @@
+     win32_maperr(error_code);
+     uerror("ReadConsoleInput", Nothing);
+   }
+-  switch (input->EventType) {
++  switch (input.EventType) {
+   case KEY_EVENT: {
+     result = caml_alloc(1, 0);
+     x = caml_alloc_tuple(4);
+     Field(result, 0) = x;
+-    cks = input->Event.KeyEvent.dwControlKeyState;
++    cks = input.Event.KeyEvent.dwControlKeyState;
+     Field(x, 0) = Val_bool((cks & LEFT_CTRL_PRESSED) | (cks & RIGHT_CTRL_PRESSED));
+     Field(x, 1) = Val_bool((cks & LEFT_ALT_PRESSED) | (cks & RIGHT_ALT_PRESSED));
+     Field(x, 2) = Val_bool(cks & SHIFT_PRESSED);
+-    code = input->Event.KeyEvent.wVirtualKeyCode;
++    code = input.Event.KeyEvent.wVirtualKeyCode;
+     for (i = 0; i < sizeof(code_table)/sizeof(code_table[0]); i++)
+       if (code == code_table[i]) {
+         Field(x, 3) = Val_int(i);
+         CAMLreturn(result);
+       }
+     y = caml_alloc_tuple(1);
+-    Field(y, 0) = Val_int(input->Event.KeyEvent.uChar.UnicodeChar);
++    Field(y, 0) = Val_int(input.Event.KeyEvent.uChar.UnicodeChar);
+     Field(x, 3) = y;
+     CAMLreturn(result);
+   }
+@@ -187,13 +178,13 @@
+     result = caml_alloc(1, 1);
+     x = caml_alloc_tuple(6);
+     Field(result, 0) = x;
+-    cks = input->Event.MouseEvent.dwControlKeyState;
++    cks = input.Event.MouseEvent.dwControlKeyState;
+     Field(x, 0) = Val_bool((cks & LEFT_CTRL_PRESSED) | (cks & RIGHT_CTRL_PRESSED));
+     Field(x, 1) = Val_bool((cks & LEFT_ALT_PRESSED) | (cks & RIGHT_ALT_PRESSED));
+     Field(x, 2) = Val_bool(cks & SHIFT_PRESSED);
+-    Field(x, 4) = Val_int(input->Event.MouseEvent.dwMousePosition.Y);
+-    Field(x, 5) = Val_int(input->Event.MouseEvent.dwMousePosition.X);
+-    bs = input->Event.MouseEvent.dwButtonState;
++    Field(x, 4) = Val_int(input.Event.MouseEvent.dwMousePosition.Y);
++    Field(x, 5) = Val_int(input.Event.MouseEvent.dwMousePosition.X);
++    bs = input.Event.MouseEvent.dwButtonState;
+     if (bs & FROM_LEFT_1ST_BUTTON_PRESSED)
+       Field(x, 3) = Val_int(0);
+     else if (bs & FROM_LEFT_2ND_BUTTON_PRESSED)
+@@ -212,6 +203,14 @@
+   CAMLreturn(Val_int(0));
+ }
+ 
++CAMLprim value lt_windows_read_console_input_job(value val_fd)
++{
++  LWT_UNIX_INIT_JOB(job, read_console_input, 0);
++  job->handle = Handle_val(val_fd);
++  job->error_code = 0;
++  return (lwt_unix_alloc_job(&(job->job)));
++}
++
+ /* +-----------------------------------------------------------------+
+    | Console informations                                            |
+    +-----------------------------------------------------------------+ */

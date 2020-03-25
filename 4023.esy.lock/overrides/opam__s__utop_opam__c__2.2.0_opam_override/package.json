@@ -1,0 +1,17 @@
+{
+  "build": [
+    [
+      "bash",
+      "-c",
+      "#{os == 'windows' ? 'patch -p1 < utop-2.2.0.patch' : 'true' }"
+    ],
+    [
+      "jbuilder",
+      "build",
+      "-p",
+      "utop",
+      "-j",
+      "4"
+    ]
+  ]
+}

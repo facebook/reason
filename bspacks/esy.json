@@ -1,0 +1,14 @@
+{
+  "name": "get-bspack",
+  "notes": "This is to get and build bspack",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+      "bspack": "bucklescript/bucklescript:bspack.json"
+  },
+  "esy": {
+    "build": [
+      ["echo", "No-op"]
+    ]
+  }
+}

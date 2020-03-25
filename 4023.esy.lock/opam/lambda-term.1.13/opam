@@ -1,0 +1,36 @@
+opam-version: "2.0"
+maintainer: "jeremie@dimino.org"
+authors: ["Jérémie Dimino"]
+homepage: "https://github.com/diml/lambda-term"
+bug-reports: "https://github.com/diml/lambda-term/issues"
+dev-repo: "git://github.com/diml/lambda-term.git"
+license: "BSD-3-Clause"
+build: [
+  ["jbuilder" "subst" "-p" name] {pinned}
+  ["jbuilder" "build" "-p" name "-j" jobs]
+  ["jbuilder" "runtest" "-p" name "-j" jobs] {with-test}
+]
+depends: [
+  "ocaml" {>= "4.02.3"}
+  "lwt" {>= "4.0.0"}
+  "lwt_log"
+  "react"
+  "zed" {>= "1.2" & < "2.0"}
+  "camomile" {>= "0.8.6"}
+  "lwt_react"
+  "jbuilder" {>= "1.0+beta9"}
+]
+synopsis: "Terminal manipulation library for OCaml"
+description: """
+Lambda-term is a cross-platform library for manipulating the terminal. It
+provides an abstraction for keys, mouse events, colors, as well as a set of
+widgets to write curses-like applications. The main objective of lambda-term is
+to provide a higher level functional interface to terminal manipulation than,
+for example, ncurses, by providing a native OCaml interface instead of bindings
+to a C library. Lambda-term integrates with zed to provide text edition
+facilities in console applications."""
+url {
+  src:
+    "https://github.com/diml/lambda-term/releases/download/1.13/lambda-term-1.13.tbz"
+  checksum: "md5=c13826a97014d4d573b927b623c7e043"
+}

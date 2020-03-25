@@ -1,0 +1,33 @@
+opam-version: "2.0"
+maintainer: "Daniel Bünzli <daniel.buenzl i@erratique.ch>"
+homepage: "http://erratique.ch/software/react"
+authors: ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
+doc: "http://erratique.ch/software/react/doc/React"
+dev-repo: "git+http://erratique.ch/repos/react.git"
+bug-reports: "https://github.com/dbuenzli/react/issues"
+tags: [ "reactive" "declarative" "signal" "event" "frp" "org:erratique" ]
+license: "ISC"
+depends: [
+  "ocaml" {>= "4.01.0"}
+  "ocamlfind" {build}
+  "ocamlbuild" {build}
+  "topkg" {build & >= "0.9.0"}
+]
+build:
+[[ "ocaml" "pkg/pkg.ml" "build"
+           "--dev-pkg" "%{pinned}%" ]]
+synopsis: "Declarative events and signals for OCaml"
+description: """
+Release %%VERSION%%
+
+React is an OCaml module for functional reactive programming (FRP). It
+provides support to program with time varying values : declarative
+events and signals. React doesn't define any primitive event or
+signal, it lets the client chooses the concrete timeline.
+
+React is made of a single, independent, module and distributed under
+the ISC license."""
+url {
+  src: "http://erratique.ch/software/react/releases/react-1.2.1.tbz"
+  checksum: "md5=ce1454438ce4e9d2931248d3abba1fcc"
+}

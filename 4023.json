@@ -1,0 +1,9 @@
+{
+  "source": "./esy.json",
+  "override": {
+    "devDependencies": {
+      "ocaml": "4.2.3004",
+      "@opam/ppx_derivers": "*"
+    }
+  }
+}
