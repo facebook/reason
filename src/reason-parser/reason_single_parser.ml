@@ -186,6 +186,8 @@ let common_remaining_infix_token pcur =
   | ['!'] -> Some(Reason_parser.BANG, pcur, pnext)
   | ['>'] -> Some(Reason_parser.GREATER, pcur, pnext)
   | ['<'] -> Some(Reason_parser.LESS, pcur, pnext)
+  | ['#'] -> Some(Reason_parser.SHARP, pcur, pnext)
+  | [':'] -> Some(Reason_parser.COLON, pcur, pnext)
   | _ -> None
 
 let rec decompose_token pos0 split =
@@ -193,7 +195,6 @@ let rec decompose_token pos0 split =
   let pnext = advance pos0 2 in
   match split with
   (* Empty token is a valid decomposition *)
-  | [] -> None
   | '=' :: tl ->
     let eq = (Reason_parser.EQUAL, pcur, pnext) in
     let (revFirstTwo, tl, pcur, _pnext) = match tl with
@@ -206,7 +207,7 @@ let rec decompose_token pos0 split =
       (match common_remaining_infix_token pcur tl with
       | None -> None
       | Some(r) -> Some(List.rev (r :: revFirstTwo)))
-  (* For type parameters  type t<+'a> = .. *)
+  (* For type parameters  type t<+'a> = .. and t<#classNameOrPolyVariantKind>*)
   | '<' :: tl ->
       let less = [Reason_parser.LESS, pcur, pnext] in
       if tl == [] then Some less
@@ -216,7 +217,13 @@ let rec decompose_token pos0 split =
         | Some(r) -> Some(List.rev (r :: less)))
   | '>' :: _tl ->
       (* Recurse to take advantage of all the logic in case the remaining
-       * begins with an equal sign. *)
+       * begins with an equal sign.
+       * This also handles:
+       *
+       *    class foo<'a, 'b>: ...
+       *
+       * Where >: is initially lexed as an infix.
+       *)
       let gt_tokens, rest_split, prest = split_greaters [] pcur split in
       if rest_split == [] then
         Some gt_tokens
@@ -224,6 +231,11 @@ let rec decompose_token pos0 split =
         (match decompose_token prest rest_split with
         | None -> None (* Couldn't parse the non-empty tail - invalidates whole thing *)
         | Some(r) -> Some(List.rev gt_tokens @ r))
+  | [_] | [_; _] ->
+    (match common_remaining_infix_token pcur split with
+     | None -> None
+     | Some a -> Some [a])
+  | [] -> None
   | _ -> None
 
 

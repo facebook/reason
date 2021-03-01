@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 /**
    Issue 940: https://github.com/facebook/reason/issues/940
    The parens in the exception match case with an alias,

@@ -1,3 +1,5 @@
+[@reason.version 3.7];
+
 /* Extension sugar */
 
 %extend

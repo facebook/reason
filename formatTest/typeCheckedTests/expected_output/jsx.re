@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 type component = {displayName: string};
 
 module Bar = {

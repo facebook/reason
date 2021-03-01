@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 /* [x] fixed */
 type t2 = (int, int); /* attributed to entire type not binding */
 

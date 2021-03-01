@@ -1,0 +1,6 @@
+(library
+ (name reason_version)
+ (public_name reason.version)
+ (modules reason_version)
+ (libraries reason.ocaml-migrate-parsetree)
+)

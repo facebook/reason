@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 /* === test wrapping for arrows === */
 type foo = option(int => int);
 type foo = option((int, int) => int);

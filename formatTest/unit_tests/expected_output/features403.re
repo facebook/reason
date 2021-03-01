@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 type t =
   | A({a: int})
   | B;

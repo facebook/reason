@@ -1,8 +1,11 @@
-[@reason.version 3.7];
-class type _module('provider_impl) = {};
+/* Copyright (c) 2015-present, Facebook, Inc. All rights reserved. */
+
+[@reason.version 3.8];
+
+class type _module<'provider_impl> = {};
 type t;
 class type bzz = {
-  inherit _module(t);
+  inherit _module<t>;
 };
 
 class type t = {

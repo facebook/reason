@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 /* Pexp_letexception with attributes */
 let () = {
   [@attribute]

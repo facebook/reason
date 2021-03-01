@@ -1,6 +1,8 @@
 /* Copyright (c) 2015-present, Facebook, Inc. All rights reserved. */
 
 /**Floating comment text should be removed*/;
+[@reason.version 3.7];
+
 let test: int;
 
 /**

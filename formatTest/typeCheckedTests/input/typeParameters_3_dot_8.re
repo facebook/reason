@@ -1,7 +1,7 @@
 /**
  * Testing type parameters.
  */
-[@reason.version 3.7];
+[@reason.version 3.8];
 
 type threeThings<'t> = ('t, 't, 't);
 type listOf<'t> = list<'t>;

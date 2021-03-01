@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 my_big_array3.{
   reallyLongStringThatWillDefinitelyBreakLine
 };

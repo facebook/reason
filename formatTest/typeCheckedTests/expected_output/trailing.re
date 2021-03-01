@@ -1,3 +1,5 @@
+[@reason.version 3.7];
+
 let x = 0;
 let y = 0;
 

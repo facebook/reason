@@ -16,14 +16,32 @@ and `rtop.json` respectively in the repo root, you would run that script after
 committing/bumping some versions:
 
 
+**IMPORTANT: Update The Version Numbers In Packages:**
+1. Make sure the version number in `esy.json` and `reason.json` is the new
+   version number for the release.
+2. Make sure the file
+   [../../src/reason-version/reason_version.ml](../../src/reason-version/reason_version.ml)
+   also has that same version number that `refmt` has:
+
 ```sh
 git checkout -b MYRELEASE origin/master
 git rebase origin/master
-vim -O esy.json reason.json
-# Then edit the version number accordingly on BOTH files. With that same VERSION do:
-version=3.5.0 make pre_release
+vim -O esy.json reason.json src/reason-version/reason_version.ml
+
+# Edit version field in jsons, and make sure reason_version has the new version
+# let package_version = {
+#   major = 3;
+#   minor = 7;
+#   patch = 0;
+# }
+
 git commit -m "Bump version"
 git push origin HEAD:PullRequestForVersion # Commit these version bumps
+
+```
+
+**Perform The Release:**
+```sh
 node ./scripts/esy-prepublish.js ./reason.json ./rtop.json
 
 # Then publish. For example:

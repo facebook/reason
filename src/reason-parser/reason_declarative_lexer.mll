@@ -451,6 +451,7 @@ rule token state = parse
     { SHARPEQUAL }
   | "#" operator_chars+
     { SHARPOP (lexeme_operator lexbuf) }
+  (* File name / line number source mapping # n string\n *)
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?
         [^ '\010' '\013'] * newline
@@ -552,24 +553,38 @@ rule token state = parse
     }
   | "[|<"
     { set_lexeme_length lexbuf 2;
+      (* TODO: See if decompose_token in Reason_single_parser.ml would work better for this *)
       LBRACKETBAR
     }
     (* allow parsing of <div /></Component> *)
   | "/></" uppercase_or_lowercase+
     { (* allow parsing of <div asd=1></div> *)
+      (* TODO: See if decompose_token in Reason_single_parser.ml would work better for this *)
       set_lexeme_length lexbuf 2;
       SLASHGREATER
     }
   | "></" uppercase_or_lowercase+
     { (* allow parsing of <div asd=1></div> *)
+      (* TODO: See if decompose_token in Reason_single_parser.ml would work better for this *)
       set_lexeme_length lexbuf 1;
       GREATER
     }
   | "><" uppercase_or_lowercase+
     { (* allow parsing of <div><span> *)
+      (* TODO: See if decompose_token in Reason_single_parser.ml would work better for this *)
       set_lexeme_length lexbuf 1;
       GREATER
     }
+  | "[@reason.version " (['0'-'9']+ as major) '.' (['0'-'9']+ as minor) (('.' ['0'-'9']+)? as _patch) ']' {
+    (* Special case parsing of attribute so that we can special case its
+     * parsing. Parses x.y.z even though it is not valid syntax otherwise -
+     * just gracefully remove the last number. The parser will ignore this
+     * attribute when parsed, and instead record its presence, and then inject
+     * the attribute into the footer of the file.  Then the printer will ensure
+     * it is formatted at the top of the file, ideally after the first file
+     * floating doc comment. *)
+    VERSION_ATTRIBUTE (int_of_string major, int_of_string minor)
+  }
   | "[@" { LBRACKETAT }
   | "[%" { LBRACKETPERCENT }
   | "[%%" { LBRACKETPERCENTPERCENT }

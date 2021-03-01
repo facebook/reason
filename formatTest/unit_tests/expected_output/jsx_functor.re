@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 type elt =
   | Text(string)
   | Group(list(elt));

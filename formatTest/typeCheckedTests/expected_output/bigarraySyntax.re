@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 /* https://github.com/facebook/reason/issues/2038 */
 let my_big_array1 =
   Bigarray.Array1.create(

@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 let (|.) = (x, y) => x + y;
 
 let a = 1;

@@ -89,4 +89,4 @@
    reason_recover_parser reason_declarative_lexer reason_lexer reason_oprint
    reason_parser_explain_raw reason_parser_explain reason_parser_recover
    reason_string)
- (libraries reason.ocaml-migrate-parsetree menhirLib reason.easy_format))
+ (libraries reason.ocaml-migrate-parsetree menhirLib reason.easy_format reason.version))

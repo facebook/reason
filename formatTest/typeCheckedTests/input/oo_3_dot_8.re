@@ -1,12 +1,13 @@
-[@reason.version 3.7];
 /* Copyright (c) 2015-present, Facebook, Inc. All rights reserved. */
 
-class virtual stack ('a) (init) = {
+[@reason.version 3.8];
+
+class virtual stack('a) (init) = {
   /*
    * The "as this" is implicit and will be formatted away.
    */
   val virtual dummy: unit;
-  val mutable v: list('a) = init;
+  val mutable v: list<'a> = init;
   pub virtual implementMe: int => int;
   pub pop =
     switch (v) {
@@ -48,7 +49,7 @@ class virtual stackWithAttributes ('a) (init) = {
   [@floatingAttribute];
   /* Virtual member */
   [@itemAttr1] val virtual dummy: unit;
-  [@itemAttr2] val mutable v: list('a) = init;
+  [@itemAttr2] val mutable v: list<'a> = init;
   pub virtual implementMe: int => int;
   pub pop =
     switch (v) {
@@ -66,7 +67,7 @@ class virtual stackWithAttributes ('a) (init) = {
 };
 
 class extendedStack ('a) (init) = {
-  inherit (class stack('a))(init);
+  inherit (class stack<'a>)(init);
   val dummy = ();
   pub implementMe = i => i;
 };
@@ -74,7 +75,7 @@ class extendedStack ('a) (init) = {
 class extendedStackAcknowledgeOverride
       ('a)
       (init) = {
-  inherit (class stack('a))(init);
+  inherit (class stack<'a>)(init);
   val dummy = ();
   pub implementMe = i => {
     i + 1;
@@ -137,7 +138,7 @@ type typeDefForClosedObj = {
   x: int,
   y: int,
 };
-type typeDefForOpenObj('a) =
+type typeDefForOpenObj<'a> =
   {
     ..
     x: int,
@@ -322,13 +323,13 @@ module HasTupleClasses: {
    * anotherExportedClass.
    */
   class anotherExportedClass ('a, 'b) =
-    class tupleClass('a, 'b);
+    class tupleClass<'a, 'b>;
 };
 
-class intTuples = class tupleClass(int, int);
+class intTuples = class tupleClass<int, int>;
 
 class intTuplesHardcoded =
-  (class tupleClass(int, int))((8, 8));
+  (class tupleClass<int, int>)((8, 8));
 
 /**
  * Note that the inner tupleClass doesn't have the "class" prefix because
@@ -336,20 +337,20 @@ class intTuplesHardcoded =
  * The parens here shouldn't be required.
  */
 class intTuplesTuples =
-  class tupleClass(
-    tupleClass(int, int),
-    tupleClass(int, int),
-  );
+  class tupleClass<
+    tupleClass<int, int>,
+    tupleClass<int, int>,
+  >;
 
-let x: tupleClass(int, int) = {
+let x: tupleClass<int, int> = {
   pub pr = (10, 10)
 };
 
-let x: #tupleClass(int, int) = x;
+let x: #tupleClass<int, int> = x;
 
 let incrementMyClassInstance:
-  (int, #tupleClass(int, int)) =>
-  #tupleClass(int, int) =
+  (int, #tupleClass<int, int>) =>
+  #tupleClass<int, int> =
   (i, inst) => {
     let (x, y) = inst#pr;
     {pub pr = (x + i, y + i)};
@@ -359,8 +360,8 @@ class myClassWithNoTypeParams = {};
 /**
  * The #myClassWithNoTypeParams should be treated as "simple"
  */
-type optionalMyClassSubtype('a) =
-  option(#myClassWithNoTypeParams) as 'a;
+type optionalMyClassSubtype<'a> =
+  option< #myClassWithNoTypeParams> as 'a;
 
 /**
  * Remember, "class type" is really "class_instance_type" (which is the type of
@@ -424,11 +425,11 @@ module type T = {
 let privacy = {pri x = c => 5 + c};
 
 module Js = {
-  type t('a);
+  type t<'a>;
 };
 
 /* supports trailing comma */
-type stream('a) = {
+type stream<'a> = {
   .
   "observer": ('a => unit) => unit,
 };
