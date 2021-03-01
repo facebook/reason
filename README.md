@@ -2,7 +2,7 @@
 <h1 align="center">Reason</h1>
 <p align="center">Simple, fast & type safe code that leverages the JavaScript & OCaml ecosystems.</p>
 <p align="center">
-  <a href="https://dev.azure.com/reasonml/reason/_build/latest?definitionId=2?branchName=master">
+  <a href="https://dev.azure.com/reasonml/reason/_build/latest?definitionId=3&branchName=master">
     <img src="https://dev.azure.com/reasonml/reason/_apis/build/status/reasonml.reason?branchName=master" alt="Build Status" />
   </a>
   <a href="https://circleci.com/gh/reasonml/reason/tree/master">
