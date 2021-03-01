@@ -169,6 +169,9 @@ jobs:
           <<: *esy_post_build_cache_key
           paths:
             - ~/.esy
+      - store_artifacts:
+          path: _esy/default/build/default/src/refmt/refmt_impl.exe
+          destination: refmt.exe
 
 workflows:
   version: 2
