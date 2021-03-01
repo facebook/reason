@@ -19,6 +19,7 @@ type lexing_error =
   | Unterminated_string
   | Unterminated_string_in_comment of Location.t * Location.t
   | Keyword_as_label of string
+  | Keyword_as_tag of string
   | Literal_overflow of string
   | Invalid_literal of string
 
@@ -78,6 +79,8 @@ let format_lexing_error ppf = function
         Ocaml_util.print_loc loc
   | Keyword_as_label kwd ->
       fprintf ppf "`%s' is a keyword, it cannot be used as label name" kwd
+  | Keyword_as_tag kwd ->
+      fprintf ppf "`%s' is a keyword, it cannot be used as tag name" kwd
   | Literal_overflow ty ->
       fprintf ppf "Integer literal exceeds the range of representable \
                    integers of type %s" ty

@@ -84,15 +84,15 @@ let unclosed_parenthesis is_opening_symbol closing_symbol check_function env =
     None
 
 let check_unclosed env =
-  let check (message, opening_symbols, closing_symbol, check_function) =
+  let check (message, open_msg, opening_symbols, closing_symbol, check_function) =
     match
       unclosed_parenthesis (fun x -> List.mem x opening_symbols)
         closing_symbol check_function env
     with
     | None -> None
     | Some (loc_start, _) ->
-      Some (Format.asprintf "Unclosed %S (opened line %d, column %d)"
-              message loc_start.pos_lnum
+      Some (Format.asprintf "Unclosed %S (%s on line %d, column %d)"
+              message open_msg loc_start.pos_lnum
               (loc_start.pos_cnum - loc_start.pos_bol))
   in
   let rec check_list = function
@@ -103,13 +103,16 @@ let check_unclosed env =
       | Some result -> result
   in
   check_list [
-    ("(", Interp.[X (T T_LPAREN)],
-     Interp.X (T T_RPAREN),
-     Raw.transitions_on_rparen);
-    ("{", Interp.[X (T T_LBRACE); X (T T_LBRACELESS)],
+    ("${", "for string region beginning ", Interp.[X (T T_STRING_TEMPLATE_SEGMENT_LBRACE)],
      Interp.X (T T_RBRACE),
      Raw.transitions_on_rbrace);
-    ("[", Interp.[ X (T T_LBRACKET); X (T T_LBRACKETAT);
+    ("(", "opened", Interp.[X (T T_LPAREN)],
+     Interp.X (T T_RPAREN),
+     Raw.transitions_on_rparen);
+    ("{", "opened", Interp.[X (T T_LBRACE); X (T T_LBRACELESS)],
+     Interp.X (T T_RBRACE),
+     Raw.transitions_on_rbrace);
+    ("[", "opened", Interp.[ X (T T_LBRACKET); X (T T_LBRACKETAT);
                    X (T T_LBRACKETBAR); X (T T_LBRACKETGREATER);
                    X (T T_LBRACKETLESS); X (T T_LBRACKETPERCENT);
                    X (T T_LBRACKETPERCENTPERCENT); ],

@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 let myComputation =
   lazy({
     let tmp = 10;

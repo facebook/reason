@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 /* Oinherit (https://github.com/ocaml/ocaml/pull/1118) */
 type t = {. a: string};
 

@@ -13,6 +13,16 @@ type attributesPartition = {
   uncurried : bool
 }
 
+let is_stylistic_attr = function
+  | { attr_name = {txt="reason.raw_literal"}; _}
+  (* Consider warnings to be "stylistic" attributes - attributes that do not
+   * affect printing *)
+  | { attr_name = {txt="ocaml.ppwarn"}; _}
+  | { attr_name = {txt="reason.preserve_braces"}; _} -> true
+  | { attr_name = {txt="reason.template"}; _} -> true
+  | _ -> false
+
+
 (** Partition attributes into kinds *)
 let rec partitionAttributes ?(partDoc=false) ?(allowUncurry=true) attrs : attributesPartition =
   match attrs with
@@ -36,10 +46,7 @@ let rec partitionAttributes ?(partDoc=false) ?(allowUncurry=true) attrs : attrib
   | ({ attr_name = {txt="ocaml.doc" | "ocaml.text"}; _} as doc)::atTl when partDoc = true ->
     let partition = partitionAttributes ~partDoc ~allowUncurry atTl in
     {partition with docAttrs=doc::partition.docAttrs}
-  | ({ attr_name = {txt="reason.raw_literal"}; _} as attr) :: atTl ->
-    let partition = partitionAttributes ~partDoc ~allowUncurry atTl in
-    {partition with stylisticAttrs=attr::partition.stylisticAttrs}
-  | ({ attr_name = {txt="reason.preserve_braces"}; _} as attr) :: atTl ->
+  | attr :: atTl when is_stylistic_attr attr ->
     let partition = partitionAttributes ~partDoc ~allowUncurry atTl in
     {partition with stylisticAttrs=attr::partition.stylisticAttrs}
   | atHd :: atTl ->
@@ -63,8 +70,7 @@ let extract_raw_literal attrs =
 
 let without_stylistic_attrs attrs =
   let rec loop acc = function
-    | attr :: rest when (partitionAttributes [attr]).stylisticAttrs != [] ->
-        loop acc rest
+    | attr :: rest when is_stylistic_attr attr -> loop acc rest
     | [] -> List.rev acc
     | attr :: rest -> loop (attr :: acc) rest
   in

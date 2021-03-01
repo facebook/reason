@@ -2,4 +2,4 @@
  (name refmt_impl)
  (public_name refmt)
  (package reason)
- (libraries reason reason.cmdliner))
+ (libraries reason reason.cmdliner reason_version))

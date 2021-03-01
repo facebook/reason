@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 let entries = ref([]);
 
 let all = ref(0);

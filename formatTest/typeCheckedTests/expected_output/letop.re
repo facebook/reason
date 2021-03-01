@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 let (let.opt) = (x, f) =>
   switch (x) {
   | None => None

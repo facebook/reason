@@ -8,7 +8,7 @@ module Range = struct
     lnum_end: int
   }
 
-  (**
+  (*
    * make a range delimited by [loc1] and [loc2]
    * 1| let a = 1;
    * 2|

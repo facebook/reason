@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 module X: {type t;};
 
 module M := X;

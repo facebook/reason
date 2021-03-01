@@ -279,6 +279,11 @@ let split_by ?(keep_empty=false) is_delim str =
   in
   loop [] len (len - 1)
 
+let is_newline c = c == '\n'
+
+let split_by_newline ?keep_empty str = split_by ?keep_empty is_newline str
+
+(* Returns the index of the first white space at the end of the string *)
 let rec trim_right_idx str idx =
   if idx = -1 then 0
   else
@@ -295,6 +300,29 @@ let trim_right str =
     else if index = length then
       str
     else String.sub str 0 index
+
+(* Returns the index of the last white space after which we start the substring.
+ * max is the max size of white spaces to remove. *)
+let rec trim_left_idx ~max_trim_size str idx =
+  let len = String.length str in
+  if (idx == len) || (idx == max_trim_size) then idx - 1
+  else
+    match String.get str idx with
+    | '\t' | ' ' | '\n' | '\r' -> trim_left_idx ~max_trim_size str (idx + 1)
+    | _ -> idx - 1
+
+let trim_left ?(max_trim_size) str =
+  let length = String.length str in
+  let max_trim_size =
+    match max_trim_size with None -> length | Some mts -> mts in
+  if length = 0 then ""
+  else
+    let index = trim_left_idx ~max_trim_size str 0 in
+    if index = length - 1 then ""
+    else if index = -1 then
+      str
+    else String.sub str (index + 1) (length - (index + 1))
+
 
 
 let processLine line =
@@ -844,6 +872,18 @@ let location_contains loc1 loc2 =
   let open Location in
   loc1.loc_start.Lexing.pos_cnum <= loc2.loc_start.Lexing.pos_cnum &&
   loc1.loc_end.Lexing.pos_cnum >= loc2.loc_end.Lexing.pos_cnum
+
+let rec last_index_rec_opt s lim i c =
+  if i <= lim then None else
+  if String.unsafe_get s i == c then Some i else last_index_rec_opt s lim (i - 1) c
+
+let rec num_leading_space_ line length idx accum =
+  if idx = length then accum else
+    match String.get line idx with
+    | '\t' | ' ' -> num_leading_space_ line length (idx + 1) (accum + 1)
+    | _ -> accum
+
+let num_leading_space line = num_leading_space_ line (String.length line) 0 0
 
 #if OCAML_VERSION >= (4, 8, 0)
 let split_compiler_error (err : Location.error) =

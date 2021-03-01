@@ -7,6 +7,7 @@
  * This has a nice side effect when printing the terms:
  * If a node has attributes attached to it,
  */;
+[@reason.version 3.7];
 
 /**Floating comment text should be removed*/;
 

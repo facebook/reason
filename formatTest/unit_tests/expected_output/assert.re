@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 switch (true) {
 | true => ()
 | false => assert(false)

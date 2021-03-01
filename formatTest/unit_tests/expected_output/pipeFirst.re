@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 foo->f->g->h;
 
 bar->f->g->h;

@@ -31,15 +31,22 @@ let init ?insert_completion_ident lexbuf =
 
 let lexbuf state = state.lexbuf
 
-let rec token state =
-  match
-    Reason_declarative_lexer.token
-      state.declarative_lexer_state state.lexbuf
+
+let rec comment_capturing_tokenizer tokenizer =
+  fun state ->
+  match tokenizer state.declarative_lexer_state state.lexbuf
   with
   | COMMENT (s, comment_loc) ->
      state.comments <- (s, comment_loc) :: state.comments;
-     token state
+     comment_capturing_tokenizer tokenizer state
   | tok -> tok
+
+let token a = (comment_capturing_tokenizer Reason_declarative_lexer.token) a
+
+let token_after_interpolation_region state =
+  Reason_declarative_lexer.token_in_template_string_region
+    state.declarative_lexer_state
+    state.lexbuf
 
 (* Routines for manipulating lexer state *)
 
@@ -56,6 +63,25 @@ exception Lex_balanced_failed of token positioned list * exn option
 let closing_of = function
   | LPAREN -> RPAREN
   | LBRACE -> RBRACE
+  | LBRACKET
+  | LBRACKETLESS
+  | LBRACKETGREATER
+  | LBRACKETAT
+  | LBRACKETPERCENT
+  | LBRACKETPERCENTPERCENT -> RBRACKET
+  | STRING_TEMPLATE_SEGMENT_LBRACE _ -> RBRACE
+  | _ -> assert false
+
+let continuer_after_closing = function
+  | LBRACKET
+  | LBRACKETLESS
+  | LBRACKETGREATER
+  | LBRACKETAT
+  | LBRACKETPERCENT
+  | LBRACKETPERCENTPERCENT
+  | LPAREN
+  | LBRACE -> fun a -> token a
+  | STRING_TEMPLATE_SEGMENT_LBRACE _ -> fun a-> token_after_interpolation_region a
   | _ -> assert false
 
 let inject_es6_fun = function
@@ -77,17 +103,16 @@ let rec lex_balanced_step state closing acc tok =
     raise (Lex_balanced_failed (acc, None))
   | (( LBRACKET | LBRACKETLESS | LBRACKETGREATER
      | LBRACKETAT
-     | LBRACKETPERCENT | LBRACKETPERCENTPERCENT ), _) ->
-    lex_balanced state closing (lex_balanced state RBRACKET acc)
-  | ((LPAREN | LBRACE), _) ->
+     | LBRACKETPERCENT | LBRACKETPERCENTPERCENT ) as l, _) ->
+    lex_balanced state closing  (lex_balanced state (closing_of l) acc)
+  | ((LPAREN | LBRACE | STRING_TEMPLATE_SEGMENT_LBRACE _), _) ->
     let rparen =
       try lex_balanced state (closing_of tok) []
       with (Lex_balanced_failed (rparen, None)) ->
         raise (Lex_balanced_failed (rparen @ acc, None))
     in
-    begin match token state with
-    | exception exn ->
-      raise (Lex_balanced_failed (rparen @ acc, Some exn))
+    begin match (continuer_after_closing tok) state with
+    | exception exn -> raise (Lex_balanced_failed (rparen @ acc, Some exn))
     | tok' ->
       let acc = if is_triggering_token tok' then inject_es6_fun acc else acc in
       lex_balanced_step state closing (rparen @ acc) tok'
@@ -118,8 +143,7 @@ let rec lex_balanced_step state closing acc tok =
 
 and lex_balanced state closing acc =
   match token state with
-  | exception exn ->
-    raise (Lex_balanced_failed (acc, Some exn))
+  | exception exn -> raise (Lex_balanced_failed (acc, Some exn))
   | tok -> lex_balanced_step state closing acc tok
 
 let lookahead_esfun state (tok, _, _ as lparen) =
@@ -145,6 +169,25 @@ let lookahead_esfun state (tok, _, _ as lparen) =
         )
      end
 
+let rec lookahead_in_template_string_interpolation state (tok, _, _ as lparen) =
+  match lex_balanced state (closing_of tok) [] with
+  | exception (Lex_balanced_failed (tokens, exn)) ->
+     state.queued_tokens <- List.rev tokens;
+     state.queued_exn <- exn;
+     lparen
+  | tokens ->
+     (* tokens' head will be the RBRACE *)
+     (* Change the below to parse "remaining template string" entrypoint *)
+     begin match token_after_interpolation_region state with
+     | exception exn ->
+        state.queued_tokens <- List.rev tokens;
+        state.queued_exn <- Some exn;
+        lparen
+     | token ->
+        state.queued_tokens <- List.rev (save_triple state.lexbuf token :: tokens);
+        lparen
+     end
+
 let token state =
   let lexbuf = state.lexbuf in
   match state.queued_tokens, state.queued_exn with
@@ -155,8 +198,12 @@ let token state =
     lookahead_esfun state lparen
   | [(LBRACE, _, _) as lparen], None ->
     lookahead_esfun state lparen
+  | [(STRING_TEMPLATE_SEGMENT_LBRACE s, _, _) as template_seg], None ->
+    lookahead_in_template_string_interpolation state template_seg
   | [], None ->
     begin match token state with
+    | (STRING_TEMPLATE_SEGMENT_LBRACE _) as tok ->
+        lookahead_in_template_string_interpolation state (save_triple state.lexbuf tok)
     | LPAREN | LBRACE as tok ->
         lookahead_esfun state (save_triple state.lexbuf tok)
     | (LIDENT _ | UNDERSCORE) as tok ->
@@ -166,10 +213,17 @@ let token state =
            state.queued_exn <- Some exn;
            tok
         | tok' ->
+          (* On finding an identifier or underscore in expression position, if
+           * the next token is "triggering" =>/:, then only return a
+           * ficticious (fake_triple) ES6_FUN marker, but queue up both the
+           * identifier tok as well as whatever was "triggering" into
+           * queued_tokens *)
           if is_triggering_token tok' then (
             state.queued_tokens <- [tok; save_triple lexbuf tok'];
             fake_triple ES6_FUN tok
           ) else (
+            (* Otherwise return the identifier token, but queue up the token
+             * that didn't "trigger" *)
             state.queued_tokens <- [save_triple lexbuf tok'];
             tok
           )
@@ -179,7 +233,9 @@ let token state =
   | x :: xs, _ ->
     state.queued_tokens <- xs; x
 
+(* Tokenize with support for IDE completion *)
 let token state =
+  (* The _last_ token's end position *)
   let space_start = state.last_cnum in
   let (token', start_p, curr_p) as token = token state in
   let token_start = start_p.Lexing.pos_cnum in

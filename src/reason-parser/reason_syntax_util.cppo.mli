@@ -32,6 +32,8 @@ val pick_while : ('a -> bool) -> 'a list -> 'a list * 'a list
 
 val split_by : ?keep_empty:bool -> (char -> bool) -> string -> string list
 
+val split_by_newline : ?keep_empty:bool -> string -> string list
+
 val processLineEndingsAndStarts : string -> string
 
 val isLineComment : string -> bool
@@ -92,9 +94,15 @@ val location_is_before : Location.t -> Location.t -> bool
 
 val location_contains : Location.t -> Location.t -> bool
 
+val trim_right : string -> string
+
+val trim_left : ?max_trim_size:int -> string -> string
+
 val split_compiler_error : Location.error -> Location.t * string
 
 val explode_str : string -> char list
+
+val num_leading_space : string -> int
 #endif
 
 module Clflags : sig

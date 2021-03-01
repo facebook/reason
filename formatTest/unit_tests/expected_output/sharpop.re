@@ -1,3 +1,4 @@
+[@reason.version 3.7];
 foo #= bar[0];
 
 foo##bar[0] = 3;
