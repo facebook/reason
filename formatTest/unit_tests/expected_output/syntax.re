@@ -175,12 +175,14 @@ type colors =
 /* This would also lend itself naturally to pattern matching - and avoid having
    to use `.` operator at all since you normally destructure. */
 type nameBlahType = {nameBlah: int};
-let myRecord = {nameBlah: 20};
+let myRecord = { nameBlah: 20 };
 let myRecordName = myRecord.nameBlah;
 
-let {nameBlah}: nameBlahType = {nameBlah: 20};
+let { nameBlah }: nameBlahType = {
+  nameBlah: 20,
+};
 print_int(nameBlah);
-let {nameBlah: aliasedToThisVar}: nameBlahType = {
+let { nameBlah: aliasedToThisVar }: nameBlahType = {
   nameBlah: 20,
 };
 print_int(aliasedToThisVar);
@@ -257,7 +259,7 @@ type point3D = {
   y: int,
   z: int,
 };
-let point2D = {x: 20, y: 30};
+let point2D = { x: 20, y: 30 };
 
 let point3D: point3D = {
   x: 10,
@@ -277,7 +279,7 @@ let addPoints = (p1: point, p2: point) => {
 
 let res1 = printPoint(point2D);
 let res2 =
-  printPoint({x: point3D.x, y: point3D.y});
+  printPoint({ x: point3D.x, y: point3D.y });
 
 /*
     When () were used to indicate sequences, the parser used seq_expr not only
@@ -305,7 +307,7 @@ let res3 =
   printPoint(
     addPoints(
       point2D,
-      {x: point3D.x, y: point3D.y},
+      { x: point3D.x, y: point3D.y },
     ),
   );
 
@@ -319,10 +321,10 @@ type hiredPerson = {
   dateHired: int,
 };
 
-let o: person = {name: "bob", age: 10};
+let o: person = { name: "bob", age: 10 };
 
 /* Parens needed? Nope! */
-let o: person = {name: "bob", age: 10};
+let o: person = { name: "bob", age: 10 };
 
 let printPerson = (p: person) => {
   let q: person = p;
@@ -340,8 +342,8 @@ let blah = (a, b) => a; /* Done (almost) */
 
 /* More than one consecutive pattern must have a single case */
 type blah = {blahBlah: int};
-let blah = (a, {blahBlah}) => a;
-let blah = (a, {blahBlah}) => a;
+let blah = (a, { blahBlah }) => a;
+let blah = (a, { blahBlah }) => a;
 
 module TryToExportTwice = {
   let myVal = "hello";
@@ -511,7 +513,7 @@ let res = {
 /* let blah a patt => 0 | anotherPatt => 1; */
 
 /*simple pattern  EQUALGREATER      expr */
-let blah = (a, {blahBlah}) => a;
+let blah = (a, { blahBlah }) => a;
 
 /*            match_case             */
 /*     pattern EQUALGREATER  expr */
@@ -987,7 +989,7 @@ let A | B | C = X;
  */
 external f: int => int = "foo";
 
-let x = {contents: 0};
+let x = { contents: 0 };
 
 let unitVal = x.contents = 210;
 
@@ -1020,8 +1022,8 @@ let registerEventHandlers =
     ) => 1;
 
 /* #1320: record destrucuring + renaming */
-let x = ({state as prevState}) => 1;
-let x = ({ReasonReact.state as prevState}) => 1;
+let x = ({ state as prevState }) => 1;
+let x = ({ ReasonReact.state as prevState }) => 1;
 
 /* 1567: optional parens around expr constraint in constructor expression */
 Some(x: int);
@@ -1396,9 +1398,9 @@ foo(~a=?Foo.a);
 foo(~a=Foo.a);
 
 /* https://github.com/facebook/reason/issues/2155#issuecomment-422077648 */
-true ? (Update({...a, b: 1}), None) : x;
-true ? {...a, b: 1} : a;
-true ? (a, {...a, b: 1}) : a;
+true ? (Update({ ...a, b: 1 }), None) : x;
+true ? { ...a, b: 1 } : a;
+true ? (a, { ...a, b: 1 }) : a;
 
 true ? ([x, ...xs]) => f(x, xs) : a;
 
@@ -1424,8 +1426,8 @@ let testCallNamedArgs =
     (foo: (~a: int, ~b: int=?) => int, a, b) =>
   foo(~a, ~b);
 
-let Foo.{name} = bar;
-let Foo.Bar.{name} = bar;
+let Foo.{ name } = bar;
+let Foo.Bar.{ name } = bar;
 
 let Foo.[name] = bar;
 let Foo.Bar.[name] = bar;

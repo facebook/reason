@@ -31,10 +31,10 @@ type t = {
   x: int,
   y: int,
 };
-let p = {contents: 0};
-let {contents: c} = p;
-let point = {x: 0, y: 0};
-let point2 = {...point, y: 200};
+let p = { contents: 0 };
+let { contents: c } = p;
+let point = { x: 0, y: 0 };
+let point2 = { ...point, y: 200 };
 
 let myTuple = (0, 0);
 let (i, j) = myTuple;

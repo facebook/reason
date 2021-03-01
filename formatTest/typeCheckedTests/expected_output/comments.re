@@ -77,11 +77,11 @@ let result =
 
 let result =
   switch (None) {
-  | Some({fieldOne: 20}) =>
+  | Some({ fieldOne: 20 }) =>
     /* Where does this comment go? */
     let tmp = 0;
     2 + tmp;
-  | Some({fieldOne: n}) =>
+  | Some({ fieldOne: n }) =>
     /* How about this one */
     let tmp = n;
     n + tmp;

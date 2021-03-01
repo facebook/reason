@@ -478,7 +478,7 @@ include YourLib.CreateComponent({
   type thing = blahblahblah;
   type state = unit;
   let getInitialState = _ => ();
-  let myValue = {recordField: "hello"};
+  let myValue = { recordField: "hello" };
 });
 
 module type HasInt = {let x: int;};
@@ -535,7 +535,7 @@ module N = {
   let z = M.{};
   let z = M.{};
   let z = {
-    M.{x: 10};
+    M.{ x: 10 };
   };
   let z = {
     M.[foo, bar];
@@ -544,7 +544,7 @@ module N = {
     M.[foo, bar];
   };
   let z = {
-    M.{x: 10, y: 20};
+    M.{ x: 10, y: 20 };
   };
   let z = {
     M.(M2.(value));
@@ -567,7 +567,7 @@ module N = {
   };
   let z = {
     open! M;
-    {x: 10};
+    { x: 10 };
   };
   let z = {
     open! M;
@@ -579,7 +579,7 @@ module N = {
   };
   let z = {
     open! M;
-    {x: 10, y: 20};
+    { x: 10, y: 20 };
   };
   let z = {
     open! M;

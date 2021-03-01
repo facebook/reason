@@ -2,14 +2,14 @@ module Foo = {
   type t = {name: string};
 };
 
-let foo = (Foo.{name}) => ();
+let foo = (Foo.{ name }) => ();
 
 let f =
   fun
-  | Foo.{name} => ()
+  | Foo.{ name } => ()
   | _ => ();
 
-let x = {Foo.name: "Reason"};
-let Foo.{name} = x;
+let x = { Foo.name: "Reason" };
+let Foo.{ name } = x;
 
-let (Foo.{name}, _) = (x, ());
+let (Foo.{ name }, _) = (x, ());

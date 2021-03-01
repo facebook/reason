@@ -137,7 +137,7 @@ let x =
 let x =
   [@onEverything] (- add(thisVal, thisVal));
 
-let bothTrue = (x, y) => {contents: x && y};
+let bothTrue = (x, y) => { contents: x && y };
 let something =
   [@onEverythingToRightOfEquals]
   (bothTrue(true, true))^;
@@ -414,7 +414,7 @@ external render: (reactElement, element) => unit =
 external createCompositeElementInternalHack:
   (
     reactClass,
-    {.. "reasonProps": 'props},
+    {.. "reasonProps": 'props },
     array(reactElement)
   ) =>
   reactElement =
@@ -638,7 +638,7 @@ module Fmt = {
 };
 
 Fmt.([@foo] barBaz());
-Fmt.([@foo] {x: 1});
+Fmt.([@foo] { x: 1 });
 Fmt.([@foo] [1, 2, 3]);
 Fmt.([@foo] (1, 2, 3));
 Fmt.([@foo] {val x = 10});

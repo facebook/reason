@@ -268,10 +268,10 @@ type alsoHasARecord =
 
 let result =
   switch (
-    AlsoHasARecord(10, 10, {x: 10, y: 20})
+    AlsoHasARecord(10, 10, { x: 10, y: 20 })
   ) {
   | Blah => 1000
-  | AlsoHasARecord(a, b, {x, y}) =>
+  | AlsoHasARecord(a, b, { x, y }) =>
     a + b + x + y
   };
 

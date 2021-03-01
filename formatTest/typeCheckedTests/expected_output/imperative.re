@@ -76,7 +76,7 @@ switch (
 | () => ()
 };
 
-let shouldStillLoop = {contents: false};
+let shouldStillLoop = { contents: false };
 
 while (shouldStillLoop.contents) {
   print_string("You're in a while loop");

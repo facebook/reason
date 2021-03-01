@@ -52,7 +52,7 @@ while (false) {
 };
 
 type myRecord = {number: int};
-let x = {number: 20};
+let x = { number: 20 };
 let number = 20;
 /*
  * The (mild) consequence of not requiring a final semi in a sequence,
@@ -78,9 +78,9 @@ let a = 0;
 let b = 0;
 let c = 0;
 /* All of these will be printed as punned because they have more than one field. */
-let firstFieldPunned = {a, b, c};
-let sndFieldPunned = {a, b, c};
-let thirdFieldPunned = {a, b, c};
+let firstFieldPunned = { a, b, c };
+let sndFieldPunned = { a, b, c };
+let thirdFieldPunned = { a, b, c };
 let singlePunAcceptedIfExtended = {
   ...firstFieldPunned,
   a,

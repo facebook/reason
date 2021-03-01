@@ -136,9 +136,9 @@ a->b##c;
   ->str
 </div>;
 
-blocks->(blocks => {"blocks": blocks});
+blocks->(blocks => { "blocks": blocks });
 <div>
-  blocks->(blocks => {"blocks": blocks})
+  blocks->(blocks => { "blocks": blocks })
 </div>;
 
 (state.title == "" ? "untitled" : state.title)

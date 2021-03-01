@@ -2,7 +2,7 @@ let x =
   switch (x) {
   | Bar =>
     ReasonReact.UpdateWithSideEffects(
-      {...state, click: click + 1},
+      { ...state, click: click + 1 },
       self => {
         let _ = 1;
         apply(bar);

@@ -419,7 +419,8 @@ let make = _children => {
     | FetchCats => ReasonReact.NoUpdate
     },
 
-  render: ({state: {posts, activeRoute}}) =>
+  render:
+    ({ state: { posts, activeRoute } }) =>
     <div>
       <h1>
         <a href="/">

@@ -1,4 +1,4 @@
-[@bs.config {foo: foo}];
+[@bs.config { foo: foo }];
 module ReactDOMRe = {
   let createElement = (tag, ~props=?, children: array('a)) => 1;
   let createElementVariadic = (tag, ~props=?, children: array('a)) => 1;

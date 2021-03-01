@@ -125,7 +125,7 @@ type closedObj = {.};
 let (<..>) = (a, b) => a + b;
 let five = 2 <..> 3;
 
-type nestedObj = {. bar: {. a: int}};
+type nestedObj = {. bar: {. a: int } };
 
 let (>>) = (a, b) => a > b;
 
@@ -156,9 +156,9 @@ let anonClosedObject: {
 };
 
 let onlyHasX = {pub x = 0};
-let xs: list({. x: int}) = [
+let xs: list({. x: int }) = [
   onlyHasX,
-  (anonClosedObject :> {. x: int}),
+  (anonClosedObject :> {. x: int }),
 ];
 
 let constrainedAndCoerced = (
@@ -168,7 +168,7 @@ let constrainedAndCoerced = (
       x: int,
       y: int,
     }) :>
-    list({. x: int})
+    list({. x: int })
 );
 
 /* If one day, unparenthesized type constraints are allowed on the RHS of a
@@ -176,13 +176,13 @@ let constrainedAndCoerced = (
  * a separate kind of token (for now). Any issues would likely be caught in the
  * idempotent test case.
  */
-let xs: ref({. x: int}) = {
-  contents: (anonClosedObject :> {. x: int}),
+let xs: ref({. x: int }) = {
+  contents: (anonClosedObject :> {. x: int }),
 };
 
 let coercedReturn = {
   let tmp = anonClosedObject;
-  (tmp :> {. x: int});
+  (tmp :> {. x: int });
 };
 
 let acceptsOpenAnonObjAsArg =

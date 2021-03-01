@@ -8,9 +8,9 @@ type t = {
   v: int,
 };
 
-type t = {.. u: int};
+type t = {.. u: int };
 
-type t = {.. u: int};
+type t = {.. u: int };
 
 type t = {..};
 

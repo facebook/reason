@@ -58,9 +58,9 @@ let result = myFunction(x(y)##z, a(b) #= c);
 
 (!x)##y##(b##c);
 
-type a = {. "foo": bar};
+type a = {. "foo": bar };
 
-let a = {"key": 10};
+let a = { "key": 10 };
 
 let b = {
   "nested": {
@@ -86,7 +86,7 @@ let d = {
   },
 };
 
-let a = {"/foo": 10};
+let a = { "/foo": 10 };
 
 let isArrayPolyfill: (. int) => bool = [%bs.raw
   "function(a) {return Object.prototype.toString.call(a) === '[object Array]'}"
@@ -121,4 +121,4 @@ type y = {
 };
 
 /* https://github.com/facebook/reason/issues/2121 */
-Style.{"container": 3};
+Style.{ "container": 3 };

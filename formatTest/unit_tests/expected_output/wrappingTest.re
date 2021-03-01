@@ -540,7 +540,7 @@ let acceptsTwoThings =
  */
 let result =
   acceptsTwoThings(
-    {age: 20, name: "a"},
+    { age: 20, name: "a" },
     {
       fieldOne: 10,
       fieldtwo: [10, 20],
@@ -2127,7 +2127,7 @@ let df_locallyAbstractFuncNotSugared =
  */
 let df_locallyAbstractFuncAnnotated:
   type a. (a, a) => inputEchoRecord(a) =
-  (input: a, input: a) => {inputIs: input};
+  (input: a, input: a) => { inputIs: input };
 
 /**
  * The following is automatically expanded at the parser level into:
@@ -2174,8 +2174,8 @@ let df_locallyAbstractFuncAnnotated:
     (a, b) =>
     (inputEchoRecord(a), inputEchoRecord(b)) =
   (input: a, input2: b) => (
-    {inputIs: input},
-    {inputIs: input2},
+    { inputIs: input },
+    { inputIs: input2 },
   );
 
 /**
@@ -2187,8 +2187,8 @@ let df_locallyAbstractFuncAnnotated:
 let df_locallyAbstractFuncAnnotated: 'figureMeOut =
   (type a, type b) => (
     (input: a, input2: b) => (
-      {inputIs: input},
-      {inputIs: input2},
+      { inputIs: input },
+      { inputIs: input2 },
     ):
       (a, b) =>
       (inputEchoRecord(a), inputEchoRecord(b))
@@ -2275,12 +2275,12 @@ let funcOnSomeConstructorHi =
 
 /* With two args */
 let funcOnSomeRecord =
-    ({firstFieldInRecord, secondField}) =>
+    ({ firstFieldInRecord, secondField }) =>
   firstFieldInRecord + secondField;
 
 let funcOnSomeRecord =
     (
-      {firstFieldInRecord, secondField},
+      { firstFieldInRecord, secondField },
       secondArg,
     ) =>
   firstFieldInRecord + secondField;
@@ -2296,7 +2296,7 @@ let funcOnSomeConstructorHi =
   x + y;
 
 let funcOnSomeRecord =
-    ({firstFieldInRecord, secondField}) =>
+    ({ firstFieldInRecord, secondField }) =>
   firstFieldInRecord + secondField;
 
 /* With two args */
@@ -2306,7 +2306,7 @@ let funcOnSomeConstructorHi =
 
 let funcOnSomeRecord =
     (
-      {firstFieldInRecord, secondField},
+      { firstFieldInRecord, secondField },
       secondArg,
     ) =>
   firstFieldInRecord + secondField;

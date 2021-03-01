@@ -104,8 +104,8 @@ module Namespace = {
 module Optional1 = {
   let createElement = (~required, ~children, ()) => {
     switch (required) {
-    | Some(a) => {displayName: a}
-    | None => {displayName: "nope"}
+    | Some(a) => { displayName: a }
+    | None => { displayName: "nope" }
     };
   };
 };
@@ -114,8 +114,8 @@ module Optional2 = {
   let createElement =
       (~optional=?, ~children, ()) => {
     switch (optional) {
-    | Some(a) => {displayName: a}
-    | None => {displayName: "nope"}
+    | Some(a) => { displayName: a }
+    | None => { displayName: "nope" }
     };
   };
 };
@@ -124,8 +124,8 @@ module DefaultArg = {
   let createElement =
       (~default=Some("foo"), ~children, ()) => {
     switch (default) {
-    | Some(a) => {displayName: a}
-    | None => {displayName: "nope"}
+    | Some(a) => { displayName: a }
+    | None => { displayName: "nope" }
     };
   };
 };

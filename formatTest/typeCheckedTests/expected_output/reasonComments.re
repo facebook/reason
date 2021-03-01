@@ -211,11 +211,11 @@ and y2 = {
 
 let result =
   switch (None) {
-  | Some({fieldOne: 20, fieldA: a}) =>
+  | Some({ fieldOne: 20, fieldA: a }) =>
     /* Where does this comment go? */
     let tmp = 0;
     2 + tmp;
-  | Some({fieldOne: n, fieldA: a}) =>
+  | Some({ fieldOne: n, fieldA: a }) =>
     /* How about this one */
     let tmp = n;
     n + tmp;
@@ -753,4 +753,4 @@ type q = {
 };
 
 /** doc let */
-let letter: q = {a: 42, b: "answer"};
+let letter: q = { a: 42, b: "answer" };
