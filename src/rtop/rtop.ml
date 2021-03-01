@@ -4,8 +4,6 @@ let () = try Topdirs.dir_directory (Sys.getenv "OCAML_TOPLEVEL_PATH") with | Not
 
 let () = UTop.require ["reason.easy_format"; "reason";]
 
-let () = Reason_toploop.main ()
-
 let () = Reason_utop.init_reason ()
 
 let () = print_string

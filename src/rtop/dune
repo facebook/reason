@@ -1,7 +1,7 @@
 (library
  (name rtop)
  (public_name rtop)
- (modules reason_util reason_utop reason_toploop)
+ (modules reason_util reason_utop)
  (wrapped false)
  (modes byte)
  (libraries compiler-libs.common menhirLib reason.easy_format reason utop reason.ocaml-migrate-parsetree))
