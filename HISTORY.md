@@ -20,6 +20,9 @@
 **Docs:**
 - README Reason logo (@iamdarshshah)[#2609][https://github.com/facebook/reason/pull/2609]
 
+**Changes:**
+- Updated README.md by adding Logo at the top & aligned header elements to the center (@iamdarshshah)[#2609](https://github.com/facebook/reason/pull/2609)
+
 ## 3.6.0
 
 **New Feature, Non Breaking:**
