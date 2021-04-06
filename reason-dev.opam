@@ -1,0 +1,20 @@
+opam-version: "2.0"
+name: "reason-dev"
+version: "dev"
+maintainer: "Jordan Walke <jordojw@gmail.com>"
+
+build: [
+  ["dune" "build" "-p" name "-j" jobs] {dev}
+  ["dune" "runtest" "-p" name "-j" jobs] {dev}
+]
+
+pin-depends: [
+  ["pastel" "https://github.com/reasonml/reason-native.git"]
+  ["cli" "https://github.com/reasonml/reason-native.git"]
+  ["file-context-printer" "https://github.com/reasonml/reason-nativ.git" ]
+  ["rely" "https://github.com/reasonml/reason-native.git"]
+]
+
+synopsis: "reason-dev: The package that runs the tests"
+description: """
+reason-dev runs a few snapshot tests to ensure bla"""

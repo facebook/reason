@@ -9,7 +9,6 @@ dev-repo: "git://github.com/facebook/reason.git"
 tags: [ "syntax" ]
 build: [
   ["dune" "build" "-p" name "-j" jobs]
-  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
 depends: [
   "ocaml"         {>= "4.03" & < "4.13"}

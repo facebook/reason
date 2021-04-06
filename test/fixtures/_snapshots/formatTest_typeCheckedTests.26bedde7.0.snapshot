@@ -1,0 +1,7 @@
+formatTest › typeCheckedTests › ./test/fixtures/formatTest/typeCheckedTests/pervasive.mli
+let (==): ('a, 'a) => bool;
+
+let (!=): ('a, 'a) => bool;
+
+let (!): bool => bool;
+

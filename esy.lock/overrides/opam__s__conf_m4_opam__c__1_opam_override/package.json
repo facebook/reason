@@ -1,6 +1,0 @@
-{
-  "build": "true",
-  "dependencies": {
-    "esy-m4": "esy-packages/esy-m4#c7cf0ac9221be2b1f9d90e83559ca08397a629e7"
-  }
-}

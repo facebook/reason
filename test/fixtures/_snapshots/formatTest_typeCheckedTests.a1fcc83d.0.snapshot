@@ -1,0 +1,5 @@
+formatTest › typeCheckedTests › ./test/fixtures/formatTest/typeCheckedTests/reasonComments.rei
+module JustString: {
+  include Map.S; /* Comment eol include */
+};
+

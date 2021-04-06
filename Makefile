@@ -4,37 +4,34 @@ SHELL=bash -o pipefail
 
 default: build
 
+install:
+	opam pin add reason . -y
+	opam pin add -y rtop .
+	opam install -y --deps-only ./reason-dev.opam
+	opam install -y dune menhir utop
+	opam pin add -y pastel https://github.com/reasonml/reason-native.git
+	opam pin add -y cli https://github.com/reasonml/reason-native.git
+	opam pin add -y file-context-printer https://github.com/reasonml/reason-native.git
+	opam pin add -y rely https://github.com/reasonml/reason-native.git
+
 build:
 	dune build
 
-install:
-	opam pin add reason . -y
-
 # CI uses opam. Regular workflow needn't.
-test-ci: install test-once-installed
+test-ci: tests test-integration
 
-# Can be run with esy x - no need to build beforehand.
-test-once-installed: clean-tests
-	./miscTests/rtopIntegrationTest.sh
-	./miscTests/backportSyntaxTests.sh
-	cd formatTest; ./test.sh
+tests:
+	dune exec test/Run.exe
+
+test-integration:
+	./test/rtopIntegrationTest.sh
 
 .PHONY: coverage
 coverage:
 	find -iname "bisect*.out" -exec rm {} \;
-	make test-once-installed
+	make test-integration
 	bisect-ppx-report -ignore-missing-files -I _build/ -html coverage-after/ bisect*.out ./*/*/*/bisect*.out
 	find -iname "bisect*.out" -exec rm {} \;
-
-clean-tests:
-	rm -rf ./formatTest/**/actual_output
-	rm -rf ./formatTest/**/intf_output
-	rm -rf ./formatTest/**/**/TestTest.cmi
-	rm -f ./formatTest/failed_tests
-	rm -f ./miscTests/reactjs_jsx_ppx_tests/*.cm*
-
-testFormat: build clean-tests
-	cd formatTest; ./test.sh
 
 all_errors:
 	@ echo "Regenerate all the possible error states for Menhir."
@@ -42,10 +39,10 @@ all_errors:
 	@ echo "---"
 	menhir --explain --strict --unused-tokens src/reason-parser/reason_parser.mly --list-errors > src/reason-parser/reason_parser.messages.checked-in
 
-clean: clean-tests
+clean:
 	dune clean
 
-clean-for-ci: clean-tests
+clean-for-ci:
 	rm -rf ./_build
 
 .PHONY: build clean
@@ -54,7 +51,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 SUBSTS:=$(ROOT_DIR)/pkg/substs
 
 # For publishing esy releases to npm
-esy-prepublish: build clean-tests pre_release
+esy-prepublish: build pre_release
 	node ./scripts/esy-prepublish.js
 
 # For OPAM

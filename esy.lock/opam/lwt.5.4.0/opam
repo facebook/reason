@@ -1,0 +1,57 @@
+opam-version: "2.0"
+synopsis: "Promises and event-driven I/O"
+description: """\
+A promise is a value that may become determined in the future.
+
+Lwt provides typed, composable promises. Promises that are resolved by I/O are
+resolved by Lwt in parallel.
+
+Meanwhile, OCaml code, including code creating and waiting on promises, runs in
+a single thread by default. This reduces the need for locks or other
+synchronization primitives. Code can be run in parallel on an opt-in basis."""
+maintainer: [
+  "Raphaël Proust <code@bnwr.net>" "Anton Bachin <antonbachin@yahoo.com>"
+]
+authors: ["Jérôme Vouillon" "Jérémie Dimino"]
+license: "MIT"
+homepage: "https://github.com/ocsigen/lwt"
+doc: "https://ocsigen.org/lwt"
+bug-reports: "https://github.com/ocsigen/lwt/issues"
+depends: [
+  "cppo" {build & >= "1.1.0"}
+  "dune" {>= "1.8.0"}
+  "dune-configurator"
+  "mmap" {>= "1.1.0"}
+  "ocaml" {>= "4.02.0"}
+  ("ocaml" {>= "4.08.0"} | "ocaml-syntax-shims")
+  "ocplib-endian"
+  "result"
+  "seq"
+  "ocamlfind" {dev & >= "1.7.3-1"}
+]
+depopts: ["base-threads" "base-unix" "conf-libev"]
+conflicts: [
+  "ocaml-variants" {= "4.02.1+BER"}
+]
+build: [
+  [
+    "dune"
+    "exec"
+    "-p"
+    name
+    "src/unix/config/discover.exe"
+    "--"
+    "--save"
+    "--use-libev"
+    "%{conf-libev:installed}%"
+  ]
+  ["dune" "build" "-p" name "-j" jobs]
+]
+dev-repo: "git+https://github.com/ocsigen/lwt.git"
+url {
+  src: "https://github.com/ocsigen/lwt/archive/5.4.0.zip"
+  checksum: [
+    "md5=fc4721bdb1a01225b96e3a2debde95fa"
+    "sha512=e427f08223b77f9af696c9e6f90ff68e27e02e446910ef90d3da542e7b00bf23dd191ac77c1871288faa2289f8d28fc2f44efc3d3fe9165fe1c7a6be88ee49ff"
+  ]
+}

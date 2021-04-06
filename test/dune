@@ -1,0 +1,16 @@
+(library
+ (name Test)
+ (public_name reason-dev.test)
+ (libraries reason rely.lib)
+ (ocamlopt_flags -linkall -g)
+ (flags -linkall -g)
+ (modules (:standard \ Run))
+)
+
+(executable
+ (name Run)
+ (public_name Run.exe)
+ (package reason-dev)
+ (libraries reason-dev.test)
+ (modules Run)
+)

@@ -23,7 +23,12 @@
   },
   "esy": {
     "build": [
-      [ "dune", "build", "-p", "reason"]
+      [
+        "dune",
+        "build",
+        "-p",
+        "reason"
+      ]
     ]
   }
 }

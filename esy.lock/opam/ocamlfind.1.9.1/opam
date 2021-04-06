@@ -1,0 +1,44 @@
+opam-version: "2.0"
+synopsis: "A library manager for OCaml"
+description: """
+Findlib is a library manager for OCaml. It provides a convention how
+to store libraries, and a file format ("META") to describe the
+properties of libraries. There is also a tool (ocamlfind) for
+interpreting the META files, so that it is very easy to use libraries
+in programs and scripts.
+"""
+license: "MIT"
+maintainer: "Thomas Gazagnaire <thomas@gazagnaire.org>"
+authors: "Gerd Stolpmann <gerd@gerd-stolpmann.de>"
+homepage: "http://projects.camlcity.org/projects/findlib.html"
+bug-reports: "https://github.com/ocaml/ocamlfind/issues"
+depends: [
+  "ocaml" {>= "4.00.0"}
+]
+depopts: ["graphics"]
+build: [
+  [
+    "./configure"
+    "-bindir" bin
+    "-sitelib" lib
+    "-mandir" man
+    "-config" "%{lib}%/findlib.conf"
+    "-no-custom"
+    "-no-camlp4" {!ocaml:preinstalled & ocaml:version >= "4.02.0"}
+    "-no-topfind" {ocaml:preinstalled}
+  ]
+  [make "all"]
+  [make "opt"] {ocaml:native}
+]
+install: [
+  [make "install"]
+  ["install" "-m" "0755" "ocaml-stub" "%{bin}%/ocaml"] {ocaml:preinstalled}
+]
+dev-repo: "git+https://github.com/ocaml/ocamlfind.git"
+url {
+  src: "http://download.camlcity.org/download/findlib-1.9.1.tar.gz"
+  checksum: [
+    "md5=65e6dc9b305ccbed1267275fe180f538"
+    "sha512=83a05f3e310fa7cabb0475c5525f7a87c1b6bc2dc5e39f094cabfb5d944a826a5581844ba00ec1a48dd96184eb9de3c4d1055cdddee2b83c700a2de5a6dc6f84"
+  ]
+}

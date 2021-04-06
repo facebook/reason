@@ -20,19 +20,11 @@ steps:
     displayName: 'opam update'
   - script: opam switch create $(OCAML_VERSION)
     displayName: 'Use OCaml version: $(OCAML_VERSION)'
-  - script: opam install -y dune
-    displayName: 'opam install -y dune'
-  - script: opam install -y menhir
-    displayName: 'opam install -y menhir'
-  - script: opam install -y utop
-    displayName: 'opam install -y utop'
   - script: make clean-for-ci
     displayName: 'make clean-for-ci'
-  - script: opam pin add -y reason .
-    displayName: "opam pin add -y reason ."
-  - script: opam pin add -y rtop .
-    displayName: "opam pin add -y rtop ."
-  - script: eval $(opam env); make test-ci
+  - script: make install
+    displayName: "make install"
+  - script: eval $(opam env); REFMT=$(opam exec -- which refmt) opam exec -- make test-ci;
     displayName: "make test-ci"
   - script: git diff --exit-code
     displayName: "Check git is clean"

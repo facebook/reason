@@ -1,8 +1,0 @@
-{
-  "buildsInSource": true,
-  "build": "bash build.sh",
-  "install": "esy-installer dune.install",
-  "buildEnv": {
-    "OCAMLPATH": "#{ $OCAMLFIND_SECONDARY_PREFIX / 'lib' : ocaml.lib : $OCAML_SECONDARY_COMPILER_PREFIX / 'share' / 'ocaml-secondary-compiler' / 'lib' }"
-  }
-}

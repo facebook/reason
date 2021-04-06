@@ -3424,7 +3424,7 @@ let printer = object(self:'self)
           | Ppat_interval (c1, c2) ->
             makeList ~postSpace:true [self#constant c1; atom ".."; self#constant c2]
           | Ppat_variant (l, None) -> makeList[atom "`"; atom l]
-          | Ppat_constraint _ ->
+          | Ppat_constraint (_p, _ct) ->
               formatPrecedence (self#pattern x)
           | Ppat_lazy p ->formatPrecedence (label ~space:true (atom "lazy") (self#simple_pattern p))
           | Ppat_extension e -> self#extension e
@@ -4540,6 +4540,7 @@ let printer = object(self:'self)
     let self = self#inline_braces in
     let rec processArguments arguments processedAttrs children =
       match arguments with
+
       | (Labelled "children", {pexp_desc = Pexp_construct (_, None)}) :: tail ->
         processArguments tail processedAttrs None
       | (Labelled "children", (

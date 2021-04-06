@@ -27,7 +27,7 @@ depends: [
   "cppo" {build}
   "dune"
   "fpath"
-  "ocaml" {>= "4.02.0"}
+  "ocaml" {>= "4.02.0" & < "4.13"}
   "result"
   "tyxml" {>= "4.3.0"}
 
@@ -36,7 +36,7 @@ depends: [
   "ocamlfind" {dev}
   "sexplib" {dev & >= "113.33.00"}
 
-  "bisect_ppx" {with-test & >= "1.3.0"}
+  "bisect_ppx" {dev & >= "1.3.0"}
 ]
 
 build: [

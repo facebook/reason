@@ -31,7 +31,7 @@ common_steps: &common_steps
         command: |
           sudo apt-get install -y pkg-config libncurses5-dev
           opam update
-          opam install -y dune menhir utop
+          make install
     - run:
         name: 'Clean'
         command: make clean-for-ci
@@ -41,15 +41,10 @@ common_steps: &common_steps
           - ~/.opam
           - ~/.npm-global
     - run:
-        name: 'opam pin'
-        command: |
-          opam pin add -y reason .
-          opam pin add -y rtop .
-    - run:
         name: 'Test'
         command: |
           eval `opam config env`
-          make test-ci
+          REFMT=$(opam exec -- which refmt) opam exec -- make test-ci
     - run:
         name: 'Check git is clean'
         command: git diff --exit-code
@@ -162,6 +157,10 @@ jobs:
           command: |
             ~/.npm-global/bin/esy build
             ~/.npm-global/bin/esy x refmt --version
+      - run:
+          name: 'esy test'
+          command: |
+            REFMT=$(~/.npm-global/bin/esy which refmt) ~/.npm-global/bin/esy test
       # Use both pre and post build caches so that we're more likely
       # to have dependencies cached. `esy build` is more likely to fail,
       # so this will make the push that fixes the build faster

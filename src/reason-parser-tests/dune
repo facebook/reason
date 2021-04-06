@@ -5,7 +5,7 @@
   (run %{bin:cppo} -V OCAML:%{ocaml_version} %{deps} -o %{targets})))
 
 (executable
- (public_name testOprint)
+ (public_name testOprint.exe)
+ (package reason-dev)
  (name testOprint)
- (package rtop)
  (libraries reason))

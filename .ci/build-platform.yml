@@ -8,7 +8,7 @@ jobs:
       vmImage: ${{ parameters.vmImage }}
       demands: node.js
     timeoutInMinutes: 120 # This is mostly for Windows
-    steps: 
+    steps:
       - powershell: $Env:Path
         continueOnError: true
         condition: and(eq(variables['AGENT.OS'], 'Windows_NT'), and(eq(variables['Build.Reason'], 'PullRequest'), and(succeeded(), ne(variables['Build.SourceBranch'], variables['System.PullRequest.TargetBranch']))))
@@ -64,7 +64,7 @@ jobs:
       - script: "esy build"
         displayName: "esy build"
       - template: utils/create-docs.yml
-      - script: "esy test"
+      - script: "REFMT=$(esy which refmt) esy test"
         displayName: "Test command"
       - powershell: esy x env
         continueOnError: true

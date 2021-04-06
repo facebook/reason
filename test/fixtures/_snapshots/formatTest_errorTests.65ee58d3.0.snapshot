@@ -1,0 +1,7 @@
+formatTest › errorTests › ./test/fixtures/formatTest/errorTests/syntaxError.re
+File \"./test/fixtures/formatTest/errorTests/syntaxError.re\", line 1, characters 9-10:
+1 | try (bad);
+             ^
+Error: Syntax error
+
+

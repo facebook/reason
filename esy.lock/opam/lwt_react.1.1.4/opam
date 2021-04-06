@@ -1,0 +1,23 @@
+opam-version: "2.0"
+synopsis: "Helpers for using React with Lwt"
+maintainer: "Anton Bachin <antonbachin@yahoo.com>"
+authors: "Jérémie Dimino"
+license: "MIT"
+homepage: "https://github.com/ocsigen/lwt"
+doc: "https://ocsigen.org/lwt/dev/api/Lwt_react"
+bug-reports: "https://github.com/ocsigen/lwt/issues"
+depends: [
+  "dune" {>= "1.8.0"}
+  "lwt" {>= "3.0.0"}
+  "ocaml"
+  "react" {>= "1.0.0"}
+]
+build: ["dune" "build" "-p" name "-j" jobs]
+dev-repo: "git+https://github.com/ocsigen/lwt.git"
+url {
+  src: "https://github.com/ocsigen/lwt/archive/5.4.0.zip"
+  checksum: [
+    "md5=fc4721bdb1a01225b96e3a2debde95fa"
+    "sha512=e427f08223b77f9af696c9e6f90ff68e27e02e446910ef90d3da542e7b00bf23dd191ac77c1871288faa2289f8d28fc2f44efc3d3fe9165fe1c7a6be88ee49ff"
+  ]
+}

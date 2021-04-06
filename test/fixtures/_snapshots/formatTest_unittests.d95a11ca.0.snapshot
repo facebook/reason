@@ -1,0 +1,3 @@
+formatTest › unit_tests › ./test/fixtures/formatTest/unit_tests/emptyFileComment.re
+// file with just a single line comment
+

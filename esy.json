@@ -17,7 +17,8 @@
   "devDependencies": {
     "@opam/merlin": "*",
     "@opam/odoc": "*",
-    "ocaml": "~4.8.0"
+    "ocaml": "~4.8.0",
+    "@reason-native/rely": "^3.1.2"
   },
   "notes-ctd": [
     "This is how you make an esy monorepo for development, but then release the monorepo as many individual packages:",
@@ -28,10 +29,35 @@
     "5. Copy ./scripts/esy-prepublish.js in to your repo and change packages= to your set of packages."
   ],
   "esy": {
-    "build": [["dune", "build", "-p", "reason,rtop"]],
+    "build": [
+      [
+        "dune",
+        "build",
+        "-p",
+        "reason,rtop"
+      ]
+    ],
+    "buildDev": [
+      [
+        "dune",
+        "build",
+        "-p",
+        "reason,rtop,reason-dev"
+      ]
+    ],
     "install": [
-      ["esy-installer", "reason.install"],
-      ["esy-installer", "rtop.install"]
+      [
+        "esy-installer",
+        "reason.install"
+      ],
+      [
+        "esy-installer",
+        "rtop.install"
+      ],
+      [
+        "esy-installer",
+        "reason-dev.install"
+      ]
     ],
     "exportedEnv": {
       "INPUT_ARGUMENTS": {
@@ -52,10 +78,10 @@
       }
     },
     "release": {
-      "bin": {
-        "rtop": "rtop",
-        "refmt": "refmt"
-      },
+      "bin": [
+        "rtop",
+        "refmt"
+      ],
       "includePackages": [
         "root",
         "@opam/base-bytes",
@@ -83,7 +109,7 @@
     }
   },
   "scripts": {
-    "test": "esy x make test-once-installed",
+    "test": "dune exec test/Run.exe",
     "doc": "esy dune build @doc"
   }
 }
